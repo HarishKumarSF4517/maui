@@ -1,7 +1,8 @@
-﻿/*
-#if IOS
+﻿
+
 using NUnit.Framework;
 using UITest.Appium;
+using UITest.Core;
 
 namespace Microsoft.Maui.TestCases.Tests.Issues
 {
@@ -15,13 +16,11 @@ namespace Microsoft.Maui.TestCases.Tests.Issues
 
 		[Test]
 		[Category(UITestCategories.Shell)]
-		[Category(UITestCategories.Compatibility)]
 		public void CustomSlideFlyoutTransitionCausesCrash()
 		{
-			// If this hasn't already crashed, the test is passing
+			
 			App.WaitForElement("Success");
 		}
 	}
 }
-#endif
-*/
+
