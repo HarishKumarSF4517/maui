@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿#if TEST_FAILS_ON_WINDOWS && TEST_FAILS_ON_CATALYST
+using NUnit.Framework;
 using UITest.Appium;
 using UITest.Core;
 
@@ -12,14 +13,14 @@ public class Issue3053 : _IssuesUITest
 
 	public override string Issue => "Moving items around on an Observable Collection causes the last item to disappear";
 
-	// [Test]
-	// [Category(UITestCategories.ListView)]
-	// [FailsOnIOS]
-	// [FailsOnAndroid]
-	// public void MovingItemInObservableCollectionBreaksListView()
-	// {
-	// 	App.WaitForElement(_instructions);
-	// 	App.Tap(_instructions);
-	// 	App.WaitForElement("Item 2");
-	// }
+	[Test]
+	[Category(UITestCategories.ListView)]
+
+	public void MovingItemInObservableCollectionBreaksListView()
+	{
+		App.WaitForElement("_instructions");
+		App.Tap("_instructions");
+		App.WaitForElement("Item 2");
+	}
 }
+#endif

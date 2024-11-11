@@ -1,4 +1,4 @@
-﻿#if !ANDROID
+﻿# if  TEST_FAILS_ON_WINDOWS
 using NUnit.Framework;
 using UITest.Appium;
 using UITest.Core;
@@ -14,38 +14,39 @@ public class Issue3008 : _IssuesUITest
 
 	public override string Issue => "Setting ListView.ItemSource to null doesn't cause it clear out its contents";
 
-	// [Test]
-	// [Category(UITestCategories.ListView)]
-	// [FailsOnIOS]
-	// public void EnsureListViewEmptiesOut()
-	// {
-	// 	App.Tap("Click Until Success");
-	// 	App.WaitForElement("Not Grouped Item");
-	// 	App.WaitForElement("Grouped Item");
+	[Test]
+	[Category(UITestCategories.ListView)]
+	public void EnsureListViewEmptiesOut()
+	{
+		App.WaitForElement("ClickUntilSuccess");
 
-	// 	App.Tap("Click Until Success");
-	// 	App.WaitForElement("Not Grouped Item");
-	// 	App.WaitForElement("Grouped Item");
+		App.Tap("ClickUntilSuccess");
+		App.WaitForElement("NotGroupedItem");
+		App.WaitForElement("GroupedItem");
 
-	// 	App.Tap("Click Until Success");
-	// 	App.WaitForNoElement("Not Grouped Item");
-	// 	App.WaitForNoElement("Grouped Item");
+		App.Tap("ClickUntilSuccess");
+		App.WaitForElement("NotGroupedItem");
+		App.WaitForElement("GroupedItem");
 
-	// 	App.Tap("Click Until Success");
-	// 	App.WaitForElement("Not Grouped Item");
-	// 	App.WaitForElement("Grouped Item");
+		App.Tap("ClickUntilSuccess");
+		App.WaitForNoElement("NotGroupedItem");
+		App.WaitForNoElement("GroupedItem");
 
-	// 	App.Tap("Click Until Success");
-	// 	App.WaitForNoElement("Not Grouped Item");
-	// 	App.WaitForNoElement("Grouped Item");
+		App.Tap("ClickUntilSuccess");
+		App.WaitForElement("NotGroupedItem");
+		App.WaitForElement("GroupedItem");
 
-	// 	App.Tap("Click Until Success");
-	// 	App.WaitForElement("Not Grouped Item");
-	// 	App.WaitForElement("Grouped Item");
+		App.Tap("ClickUntilSuccess");
+		App.WaitForNoElement("NotGroupedItem");
+		App.WaitForNoElement("GroupedItem");
 
-	// 	App.Tap("Click Until Success");
-	// 	App.WaitForNoElement("Not Grouped Item");
-	// 	App.WaitForNoElement("Grouped Item");
-	// }
+		App.Tap("ClickUntilSuccess");
+		App.WaitForElement("NotGroupedItem");
+		App.WaitForElement("GroupedItem");
+
+		App.Tap("ClickUntilSuccess");
+		App.WaitForNoElement("NotGroupedItem");
+		App.WaitForNoElement("GroupedItem");
+	}
 }
 #endif
