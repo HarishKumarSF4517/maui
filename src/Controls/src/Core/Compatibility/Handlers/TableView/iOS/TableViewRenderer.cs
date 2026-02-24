@@ -31,8 +31,12 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 		{
 			base.LayoutSubviews();
 
+#pragma warning disable CS0618 // Type or member is obsolete
 			if (_previousFrame != Frame)
+#pragma warning disable CS0618 // Type or member is obsolete
 				_previousFrame = Frame;
+#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618 // Type or member is obsolete
 		}
 
 		protected override void Dispose(bool disposing)
@@ -77,8 +81,7 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 
 				if (Control == null || Control.Style != style)
 				{
-					if (Control != null)
-						Control.Dispose();
+					Control?.Dispose();
 
 					var tv = CreateNativeControl();
 					_originalBackgroundView = tv.BackgroundView;

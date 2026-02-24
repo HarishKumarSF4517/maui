@@ -98,7 +98,7 @@ namespace Microsoft.Maui.TestUtils.DeviceTests.Runners.HeadlessRunner
 			}
 			else
 			{
-				var downloads = Android.OS.Environment.DirectoryDownloads!;
+				var downloads = global::Android.OS.Environment.DirectoryDownloads!;
 				var relative = Path.Combine(downloads, Context!.PackageName!, guid);
 
 				var values = new ContentValues();
@@ -113,19 +113,12 @@ namespace Microsoft.Maui.TestUtils.DeviceTests.Runners.HeadlessRunner
 					source.CopyTo(dest);
 
 #pragma warning disable CS0618 // Type or member is obsolete
-				var root = Android.OS.Environment.ExternalStorageDirectory!.AbsolutePath;
+				var root = global::Android.OS.Environment.ExternalStorageDirectory!.AbsolutePath;
 #pragma warning restore CS0618 // Type or member is obsolete
 				finalPath = Path.Combine(root, relative, name);
 			}
 
-			if (OperatingSystem.IsAndroidVersionAtLeast(21))
-			{
-				bundle.PutCharSequence("test-results-path", finalPath);
-			}
-			else
-			{
-				bundle.PutString("test-results-path", finalPath);
-			}
+			bundle.PutString("test-results-path", finalPath);
 		}
 
 		Task<Bundle> RunTestsAsync()
