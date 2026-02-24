@@ -181,8 +181,8 @@ namespace Microsoft.Maui.TestCases.Tests
 		}
 #endif
 
-#if TEST_FAILS_ON_CATALYST && TEST_FAILS_ON_WINDOWS // These platforms not support orientation changes which is required to test the OrientationStateTrigger
-#if TEST_FAILS_ON_ANDROID // This test is currently failing on Android in Automation, But can be passes Manually.
+#if TEST_FAILS_ON_CATALYST && TEST_FAILS_ON_WINDOWS // These platforms do not support orientation changes which is required to test the OrientationStateTrigger
+#if TEST_FAILS_ON_ANDROID // This test is currently failing on Android in Automation, but can be passed manually.
 		[Test]
 		[Order(7)]
 		public void OrientationStateTriggerShowsCorrectBackground()
@@ -201,7 +201,7 @@ namespace Microsoft.Maui.TestCases.Tests
 			Assert.That(orientationLandscapeText, Is.EqualTo("Current orientation: Landscape"));
 
 			App.SetOrientationPortrait();
-			App.WaitForElement("Options");// Verify orientation label returns to portrait
+			App.WaitForElement("Options"); // Verify orientation label returns to portrait
 		}
 #endif
 
@@ -218,7 +218,6 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.SetOrientationLandscape();
 
 			App.WaitForElement("Options"); // Wait for page to stabilize after orientation change
-										   // Verify landscape orientation after change
 			VerifyScreenshotOrSetExceptionWithCroppingLeft(ref exception, "AdaptiveTrigger_Landscape");
 
 			App.SetOrientationPortrait();

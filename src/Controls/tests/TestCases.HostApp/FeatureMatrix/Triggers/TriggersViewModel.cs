@@ -213,9 +213,12 @@ public class StringNotNullOrEmptyConverter : IValueConverter
 		return !string.IsNullOrEmpty(value as string);
 	}
 
+	/// <summary>
+	/// Two-way binding is not supported. Returns <see cref="Binding.DoNothing"/> as a default.
+	/// </summary>
 	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 	{
-		throw new NotImplementedException();
+		return Binding.DoNothing;
 	}
 }
 
@@ -233,8 +236,11 @@ public class StringLengthConverter : IValueConverter
 		return 0;
 	}
 
+	/// <summary>
+	/// Two-way binding is not supported. Returns <see cref="Binding.DoNothing"/> as a default.
+	/// </summary>
 	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 	{
-		throw new NotImplementedException();
+		return Binding.DoNothing;
 	}
 }
