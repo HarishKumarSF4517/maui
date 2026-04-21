@@ -6,6 +6,7 @@ using UITest.Core;
 
 namespace Microsoft.Maui.TestCases.Tests;
 
+[Category(UITestCategories.TitleView)]
 public class TitleBarFeatureTests : _GalleryUITest
 {
 	public const string TitleBarFeatureMatrix = "TitleBar Feature Matrix";
@@ -17,7 +18,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(1)]
 	public void TitleBar_Window()
 	{
 		App.WaitForElement("ResetButton");
@@ -62,7 +63,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(2)]
 	public void TitleBar_Icon_WithTrailingContentAndLeadingContent()
 	{
 		App.WaitForElement("ResetButton");
@@ -83,7 +84,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(3)]
 	public void TitleBar_Icon_WithBackgroundColor()
 	{
 		App.WaitForElement("ResetButton");
@@ -104,7 +105,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(4)]
 	public void TitleBar_Icon_WithSearchBar()
 	{
 		App.WaitForElement("ResetButton");
@@ -125,7 +126,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(5)]
 	public void TitleBar_Icon_WithForegroundColor()
 	{
 		App.WaitForElement("ResetButton");
@@ -151,7 +152,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(6)]
 	public void TitleBar_ForegroundColor_WithBackgroundColor()
 	{
 		App.WaitForElement("ResetButton");
@@ -179,7 +180,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(7)]
 	public void TitleBar_ForegroundColor_WithGrid()
 	{
 		App.WaitForElement("ResetButton");
@@ -207,7 +208,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(8)]
 	public void TitleBar_TrailingContentAndLeadingContent_WithHorizontalStackLayout()
 	{
 		App.WaitForElement("ResetButton");
@@ -230,7 +231,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(9)]
 	public void TitleBar_TrailingContentAndLeadingContent_WithGrid()
 	{
 		App.WaitForElement("ResetButton");
@@ -253,7 +254,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(10)]
 	public void TitleBar_TrailingContentAndLeadingContent_WithTitleAndSubtitle()
 	{
 		App.WaitForElement("ResetButton");
@@ -276,7 +277,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(11)]
 	public void TitleBar_TrailingContentAndLeadingContent_WithBackgroundColor()
 	{
 		App.WaitForElement("ResetButton");
@@ -299,7 +300,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(12)]
 	public void TitleBar_TrailingContentAndLeadingContent_WithSearchBar()
 	{
 		App.WaitForElement("ResetButton");
@@ -322,7 +323,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(13)]
 	public void TitleBar_TitleAndSubTitle_WithBackgroundColor()
 	{
 		App.WaitForElement("ResetButton");
@@ -345,7 +346,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(14)]
 	public void TitleBar_TitleAndSubTitle_WithHorizontalStackLayout()
 	{
 		App.WaitForElement("ResetButton");
@@ -367,7 +368,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(15)]
 	public void TitleBar_TitleAndSubTitle_WithGrid()
 	{
 		App.WaitForElement("ResetButton");
@@ -389,7 +390,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(16)]
 	public void TitleBar_TitleAndSubTitle_WithSearchBar()
 	{
 		App.WaitForElement("ResetButton");
@@ -411,7 +412,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(17)]
 	public void TitleBar_BackgroundColor_WithGrid()
 	{
 		App.WaitForElement("ResetButton");
@@ -433,12 +434,22 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(18)]
 	public void TitleBar_IsVisible()
 	{
 		App.WaitForElement("ResetButton");
 		App.Tap("ResetButton");
 
+		// Set title content before hiding so the window content expansion is visible
+		App.WaitForElement("ShowTitleCheckBox");
+		App.Tap("ShowTitleCheckBox");
+		App.WaitForElement("ShowSubtitleCheckBox");
+		App.Tap("ShowSubtitleCheckBox");
+
+		App.WaitForElement("ApplyButton");
+		App.Tap("ApplyButton");
+
+		// Now hide the TitleBar — content should expand into the title bar region
 		App.WaitForElement("ShowTitleBarCheckBox");
 		App.Tap("ShowTitleBarCheckBox");
 
@@ -450,7 +461,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 
 #if TEST_FAILS_ON_WINDOWS && TEST_FAILS_ON_MACCATALYST //For more information see: https://github.com/dotnet/maui/issues/30399
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(19)]
 	public void TitleBar_RTL_WithTrailingContentAndLeadingContent()
 	{
 		App.WaitForElement("ResetButton");
@@ -470,7 +481,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(20)]
 	public void TitleBar_RTL_WithTitleAndSubTitle()
 	{
 		App.WaitForElement("ResetButton");
@@ -490,7 +501,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(21)]
 	public void TitleBar_RTL_WithSearchBar()
 	{
 		App.WaitForElement("ResetButton");
@@ -510,7 +521,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(22)]
 	public void TitleBar_RTL_WithHorizontalStackLayout()
 	{
 		App.WaitForElement("ResetButton");
@@ -530,7 +541,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 
 	[Test]
-	[Category(UITestCategories.TitleView)]
+	[Order(23)]
 	public void TitleBar_RTL_WithGridWithProgressBar()
 	{
 		App.WaitForElement("ResetButton");
@@ -550,8 +561,8 @@ public class TitleBarFeatureTests : _GalleryUITest
 	}
 #endif
 	[Test]
-	[Category(UITestCategories.TitleView)]
-	public void TitleBar_TitleAndSubTitle_Entry()
+	[Order(24)]
+	public void TitleBar_TitleAndSubTitle_CustomTextEntry()
 	{
 		App.WaitForElement("ResetButton");
 		App.Tap("ResetButton");
@@ -569,6 +580,44 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.Tap("SubtitleEntry");
 		App.ClearText("SubtitleEntry");
 		App.EnterText("SubtitleEntry", "Custom Subtitle");
+
+		App.WaitForElement("ApplyButton");
+		App.Tap("ApplyButton");
+
+		VerifyScreenshot(includeTitleBar: true);
+	}
+
+	[Test]
+	[Order(25)]
+	public void TitleBar_HeightRequest_Small()
+	{
+		App.WaitForElement("ResetButton");
+		App.Tap("ResetButton");
+
+		App.WaitForElement("ShowTitleCheckBox");
+		App.Tap("ShowTitleCheckBox");
+
+		App.WaitForElement("HeightSmallRadioButton");
+		App.Tap("HeightSmallRadioButton");
+
+		App.WaitForElement("ApplyButton");
+		App.Tap("ApplyButton");
+
+		VerifyScreenshot(includeTitleBar: true);
+	}
+
+	[Test]
+	[Order(26)]
+	public void TitleBar_HeightRequest_Large()
+	{
+		App.WaitForElement("ResetButton");
+		App.Tap("ResetButton");
+
+		App.WaitForElement("ShowTitleCheckBox");
+		App.Tap("ShowTitleCheckBox");
+
+		App.WaitForElement("HeightLargeRadioButton");
+		App.Tap("HeightLargeRadioButton");
 
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
