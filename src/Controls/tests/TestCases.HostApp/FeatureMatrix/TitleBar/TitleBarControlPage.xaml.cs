@@ -26,73 +26,59 @@ public partial class TitleBarControlPage : ContentPage
 		if (window == null)
 			return;
 
-		try
+		// Create a new TitleBar with the desired properties
+		var titleBar = new Microsoft.Maui.Controls.TitleBar
 		{
-			// Create a new TitleBar with the desired properties
-			var titleBar = new Microsoft.Maui.Controls.TitleBar
+			Title = _viewModel.Title,
+			Subtitle = _viewModel.Subtitle,
+			BackgroundColor = _viewModel.Color,
+			ForegroundColor = _viewModel.ForegroundColor,
+			Icon = _viewModel.Icon,
+			IsVisible = _viewModel.IsVisible,
+			HeightRequest = _viewModel.HeightRequest
+		};
+
+		// Set content properties conditionally to avoid null reference issues
+		if (_viewModel.TrailingContent != null)
+			titleBar.TrailingContent = _viewModel.TrailingContent;
+
+		if (_viewModel.LeadingContent != null)
+			titleBar.LeadingContent = _viewModel.LeadingContent;
+
+		if (_viewModel.TitleBarContent != null)
+			titleBar.Content = _viewModel.TitleBarContent;
+
+		titleBar.FlowDirection = _viewModel.FlowDirection;
+
+		// Set up visual states for the TitleBar
+		VisualStateManager.SetVisualStateGroups(titleBar, new VisualStateGroupList
+		{
+			new VisualStateGroup
 			{
-				Title = _viewModel.Title,
-				Subtitle = _viewModel.Subtitle,
-				BackgroundColor = _viewModel.Color,
-				ForegroundColor = _viewModel.ForegroundColor,
-				Icon = _viewModel.Icon,
-				IsVisible = _viewModel.IsVisible,
-				HeightRequest = 60
-			};
-
-			// Set content properties conditionally to avoid null reference issues
-			if (_viewModel.TrailingContent != null)
-				titleBar.TrailingContent = _viewModel.TrailingContent;
-
-			if (_viewModel.LeadingContent != null)
-				titleBar.LeadingContent = _viewModel.LeadingContent;
-
-			if (_viewModel.TitleBarContent != null)
-				titleBar.Content = _viewModel.TitleBarContent;
-
-			titleBar.FlowDirection = _viewModel.FlowDirection;
-
-			// Set up visual states for the TitleBar
-			VisualStateManager.SetVisualStateGroups(titleBar, new VisualStateGroupList
-			{
-				new VisualStateGroup
+				Name = "TitleActiveStates",
+				States =
 				{
-					Name = "TitleActiveStates",
-					States =
+					new VisualState
 					{
-						new VisualState
-						{
-							Name = "TitleBarTitleActive",
-							Setters = { new Setter { Property = Microsoft.Maui.Controls.TitleBar.ForegroundColorProperty, Value = Colors.White } }
-						},
-						new VisualState
-						{
-							Name = "TitleBarTitleInactive",
-							Setters = { new Setter { Property = Microsoft.Maui.Controls.TitleBar.ForegroundColorProperty, Value = Colors.Black } }
-						}
+						Name = "TitleBarTitleActive",
+						Setters = { new Setter { Property = Microsoft.Maui.Controls.TitleBar.ForegroundColorProperty, Value = Colors.White } }
+					},
+					new VisualState
+					{
+						Name = "TitleBarTitleInactive",
+						Setters = { new Setter { Property = Microsoft.Maui.Controls.TitleBar.ForegroundColorProperty, Value = Colors.Black } }
 					}
 				}
-			});
+			}
+		});
 
-			// Assign the new TitleBar to the window
-			window.TitleBar = titleBar;
-		}
-		catch (Exception ex)
-		{
-			System.Diagnostics.Debug.WriteLine($"Error setting up TitleBar: {ex.Message}");
-		}
+		// Assign the new TitleBar to the window
+		window.TitleBar = titleBar;
 	}
 
 	private void OnFlowDirectionCheckBoxChanged(object sender, CheckedChangedEventArgs e)
 	{
-		if (e.Value)
-		{
-			_viewModel.FlowDirection = FlowDirection.RightToLeft;
-		}
-		else
-		{
-			_viewModel.FlowDirection = FlowDirection.LeftToRight;
-		}
+		_viewModel.FlowDirection = e.Value ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
 	}
 
 	private void OnResetButtonClicked(object sender, EventArgs e)
