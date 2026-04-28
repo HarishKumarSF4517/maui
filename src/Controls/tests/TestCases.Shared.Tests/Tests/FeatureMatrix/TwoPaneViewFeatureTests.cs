@@ -92,10 +92,10 @@ namespace Microsoft.Maui.TestCases.Tests
             App.WaitForElement("Apply");
             App.Tap("Apply");
 
-            var pane1Y = App.WaitForElement("Pane1Label").GetRect().X;
-            var pane2Y = App.WaitForElement("Pane2Label").GetRect().X;
+            var pane1X = App.WaitForElement("Pane1Label").GetRect().X;
+            var pane2X = App.WaitForElement("Pane2Label").GetRect().X;
 
-            Assert.That(pane2Y, Is.GreaterThan(pane1Y), "Pane2 should be to the right of Pane1 in Wide mode");
+            Assert.That(pane2X, Is.GreaterThan(pane1X), "Pane2 should be to the right of Pane1 in Wide mode");
 
             Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Wide Mode"));
         }
@@ -219,8 +219,61 @@ namespace Microsoft.Maui.TestCases.Tests
             VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
         }
 
+        [Test, Order(9)]
+        [Category(UITestCategories.Layout)]
+        public void TwoPaneView_SinglePane()
+        {
+            App.WaitForElement("Options");
+            App.Tap("Options");
+
+            // Setting WideModeConfiguration to SinglePane forces single-pane display.
+            // The Window Mode label only ever shows "Tall Mode" or "Wide Mode" and
+            // collapses SinglePane to "Tall Mode".
+            App.WaitForElement("WideModeSinglePaneRadio");
+            App.Tap("WideModeSinglePaneRadio");
+
+            App.WaitForElement("Apply");
+            App.Tap("Apply");
+
+            Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Tall Mode"),
+                "CurrentModeLabel should display 'Tall Mode' when WideModeConfiguration is SinglePane");
+        }
+
+        [Test, Order(10)]
+        [Category(UITestCategories.Layout)]
+        public void TwoPaneView_Pane1SizeIncrease_WithWideMode()
+        {
+            App.WaitForElement("Options");
+            App.Tap("Options");
+
+            App.IncreaseStepper("Pane1LengthStepper");
+            App.IncreaseStepper("Pane1LengthStepper");
+
+            App.WaitForElement("Apply");
+            App.Tap("Apply");
+
+            VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+        }
+
+        [Test, Order(11)]
+        [Category(UITestCategories.Layout)]
+        public void TwoPaneView_Pane2SizeIncrease_WithWideMode()
+        {
+            App.WaitForElement("Options");
+            App.Tap("Options");
+
+            App.IncreaseStepper("Pane2LengthStepper");
+            App.IncreaseStepper("Pane2LengthStepper");
+
+            App.WaitForElement("Apply");
+            App.Tap("Apply");
+
+            VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+        }
+
 #endif
-		[Test, Order(15)]
+
+		[Test, Order(20)]
 		[Category(UITestCategories.Layout)]
 		public void TwoPaneView_IsVisible()
 		{
@@ -236,9 +289,9 @@ namespace Microsoft.Maui.TestCases.Tests
 			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 		}
 
-		[Test, Order(14)]
+		[Test, Order(23)]
 		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_ZIsShadowEnabled()
+		public void TwoPaneView_IsShadowEnabled()
 		{
 			App.WaitForElement("Options");
 			App.Tap("Options");
@@ -252,7 +305,7 @@ namespace Microsoft.Maui.TestCases.Tests
 			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 		}
 
-		[Test, Order(13)]
+		[Test, Order(22)]
 		[Category(UITestCategories.Layout)]
 		public void TwoPaneView_Pane1SizeIncrease()
 		{
@@ -270,7 +323,7 @@ namespace Microsoft.Maui.TestCases.Tests
 			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 		}
 
-		[Test, Order(12)]
+		[Test, Order(21)]
 		[Category(UITestCategories.Layout)]
 		public void TwoPaneView_Pane2SizeIncrease()
 		{
@@ -506,6 +559,49 @@ namespace Microsoft.Maui.TestCases.Tests
 
 			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 		}
-#endif
+		[Test, Order(18)]
+		[Category(UITestCategories.Layout)]
+		public void TwoPaneView_SinglePane()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
+
+			// Setting TallModeConfiguration to SinglePane forces single-pane display.
+			// The Window Mode label only ever shows "Tall Mode" or "Wide Mode" and
+			// collapses SinglePane to "Tall Mode".
+			App.WaitForElement("TallModeSinglePaneRadio");
+			App.Tap("TallModeSinglePaneRadio");
+
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Tall Mode"),
+				"CurrentModeLabel should display 'Tall Mode' when TallModeConfiguration is SinglePane");
+		}
+
+		[Test, Order(19)]
+		[Category(UITestCategories.Layout)]
+		public void TwoPaneView_Pane2Priority_WithWideMode()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
+
+			App.WaitForElement("WideModeStepper");
+			App.DecreaseStepper("WideModeStepper");
+			App.WaitForElement("WideModeStepper");
+			App.DecreaseStepper("WideModeStepper");
+
+			App.WaitForElement("WideModeSinglePaneRadio");
+			App.Tap("WideModeSinglePaneRadio");
+
+			App.WaitForElement("PanePriorityPane2Radio");
+			App.Tap("PanePriorityPane2Radio");
+
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+		}
 	}
 }
+#endif
