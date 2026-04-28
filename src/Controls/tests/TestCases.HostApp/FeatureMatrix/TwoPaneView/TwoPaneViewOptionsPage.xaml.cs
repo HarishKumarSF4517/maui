@@ -32,11 +32,6 @@ public partial class TwoPaneViewOptionsPage : ContentPage
 		}
 	}
 
-	private void OnShadowCheckBoxChanged(object sender, CheckedChangedEventArgs e)
-	{
-		_viewModel.IsShadowEnabled = e.Value;
-	}
-
 	private void ApplyButton_Clicked(object sender, EventArgs e)
 	{
 		Navigation.PopAsync();

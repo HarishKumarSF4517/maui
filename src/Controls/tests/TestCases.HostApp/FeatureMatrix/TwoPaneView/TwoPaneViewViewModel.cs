@@ -170,24 +170,25 @@ public class TwoPaneViewViewModel : INotifyPropertyChanged
 		set { if (value) PanePriority = TwoPaneViewPriority.Pane2; }
 	}
 
-	// Property to track if the current mode is Wide mode
-	// This would typically be set by the TwoPaneView control itself
-	private bool _isWideMode = false;
-	public bool IsWideMode
+	// Tracks the current TwoPaneView mode (SinglePane / Wide / Tall)
+	private TwoPaneViewMode _currentTwoPaneMode = TwoPaneViewMode.SinglePane;
+	public TwoPaneViewMode CurrentTwoPaneMode
 	{
-		get => _isWideMode;
+		get => _currentTwoPaneMode;
 		set
 		{
-			if (_isWideMode != value)
+			if (_currentTwoPaneMode != value)
 			{
-				_isWideMode = value;
+				_currentTwoPaneMode = value;
 				OnPropertyChanged();
 				OnPropertyChanged(nameof(CurrentModeText));
 			}
 		}
 	}
 
-	public string CurrentModeText => IsWideMode ? "Wide Mode" : "Tall Mode";
+	public string CurrentModeText => CurrentTwoPaneMode == TwoPaneViewMode.Wide
+		? "Wide Mode"
+		: "Tall Mode";
 
 	protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
 	{
