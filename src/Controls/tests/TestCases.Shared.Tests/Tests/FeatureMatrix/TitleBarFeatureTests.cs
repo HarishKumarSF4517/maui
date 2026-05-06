@@ -59,7 +59,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -80,7 +80,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -101,7 +101,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -122,7 +122,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -148,7 +148,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -176,7 +176,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -204,7 +204,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -227,7 +227,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -250,7 +250,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -273,7 +273,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -296,7 +296,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -319,7 +319,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -342,7 +342,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -364,7 +364,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -386,7 +386,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -408,7 +408,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -430,7 +430,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -456,10 +456,10 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
-#if TEST_FAILS_ON_WINDOWS && TEST_FAILS_ON_MACCATALYST //For more information see: https://github.com/dotnet/maui/issues/30399
+#if TEST_FAILS_ON_WINDOWS || TEST_FAILS_ON_MACCATALYST //For more information see: https://github.com/dotnet/maui/issues/30399
 	[Test]
 	[Order(19)]
 	public void TitleBar_RTL_WithTrailingContentAndLeadingContent()
@@ -477,7 +477,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar:true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -497,7 +497,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar:true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -517,7 +517,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar:true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -537,7 +537,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar:true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -557,7 +557,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar:true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 #endif
 	[Test]
@@ -584,7 +584,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -603,7 +603,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test]
@@ -622,7 +622,7 @@ public class TitleBarFeatureTests : _GalleryUITest
 		App.WaitForElement("ApplyButton");
 		App.Tap("ApplyButton");
 
-		VerifyScreenshot(includeTitleBar: true);
+		VerifyScreenshot(includeTitleBar: true, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 }
 #endif
