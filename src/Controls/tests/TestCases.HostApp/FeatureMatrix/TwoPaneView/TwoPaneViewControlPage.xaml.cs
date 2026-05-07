@@ -49,7 +49,7 @@ public partial class TwoPaneViewControlMainPage : ContentPage
 
 	private async void NavigateToOptionsPage_Clicked(object sender, EventArgs e)
 	{
-		BindingContext = _viewModel = new TwoPaneViewViewModel();
+		_viewModel.ResetToDefaults();
 		await Navigation.PushAsync(new TwoPaneViewOptionsPage(_viewModel));
 	}
 }
