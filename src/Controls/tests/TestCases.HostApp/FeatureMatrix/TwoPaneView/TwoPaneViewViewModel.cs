@@ -190,6 +190,20 @@ public class TwoPaneViewViewModel : INotifyPropertyChanged
 		? "Wide Mode"
 		: "Tall Mode";
 
+	public void ResetToDefaults()
+	{
+		Pane1Length = new GridLength(1, GridUnitType.Star);
+		Pane2Length = new GridLength(1, GridUnitType.Star);
+		MinTallModeHeight = 500;
+		MinWideModeWidth = 700;
+		IsShadowEnabled = false;
+		IsVisible = true;
+		FlowDirection = FlowDirection.LeftToRight;
+		TallModeConfiguration = TwoPaneViewTallModeConfiguration.TopBottom;
+		WideModeConfiguration = TwoPaneViewWideModeConfiguration.LeftRight;
+		PanePriority = TwoPaneViewPriority.Pane1;
+	}
+
 	protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

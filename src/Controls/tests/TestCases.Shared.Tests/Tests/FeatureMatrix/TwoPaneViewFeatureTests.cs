@@ -236,6 +236,59 @@ namespace Microsoft.Maui.TestCases.Tests
 				"CurrentModeLabel should display 'Tall Mode' when WideModeConfiguration is SinglePane");
 		}
 
+		[Test, Order(12)]
+		[Category(UITestCategories.Layout)]
+		public void TwoPaneView_TallMode_UsingMinTallModeHeight()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
+
+			// Increase MinWidelModeHeight above screen height to force Tall mode.
+			App.IncreaseStepper("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
+
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			var pane1Y = App.WaitForElement("Pane1Label").GetRect().Y;
+			var pane2Y = App.WaitForElement("Pane2Label").GetRect().Y;
+
+			Assert.That(pane2Y, Is.GreaterThan(pane1Y), "Pane2 should be below Pane1 when MinTallModeHeight forces Tall mode");
+			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Tall Mode"),
+				"CurrentModeLabel should display 'Tall Mode' when MinTallModeHeight exceeds screen height");
+		}
+
+		[Test, Order(13)]
+		[Category(UITestCategories.Layout)]
+		public void TwoPaneView_Pane2Priority_WithWideMode()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
+
+			// Force Wide mode by setting MinWideModeWidth below screen width.
+			App.DecreaseStepper("WideModeStepper");
+			App.DecreaseStepper("WideModeStepper");
+
+			// Both Tall and Wide configurations must be SinglePane so that the mode-resolution
+			// logic in TwoPaneView.UpdateMode() falls through to the PanePriority-driven default.
+			// Otherwise (e.g. only WideMode=SinglePane), the layout collapses to Tall mode on
+			// single-screen devices and PanePriority is ignored.
+			App.WaitForElement("TallModeSinglePaneRadio");
+			App.Tap("TallModeSinglePaneRadio");
+
+			App.WaitForElement("WideModeSinglePaneRadio");
+			App.Tap("WideModeSinglePaneRadio");
+
+			App.WaitForElement("PanePriorityPane2Radio");
+			App.Tap("PanePriorityPane2Radio");
+
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+		}
+
 		[Test, Order(10)]
 		[Category(UITestCategories.Layout)]
 		public void TwoPaneView_Pane1SizeIncrease_WithWideMode()
