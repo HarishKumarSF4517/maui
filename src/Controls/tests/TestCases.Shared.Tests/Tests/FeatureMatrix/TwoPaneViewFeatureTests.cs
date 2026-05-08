@@ -238,12 +238,15 @@ namespace Microsoft.Maui.TestCases.Tests
 
 		[Test, Order(12)]
 		[Category(UITestCategories.Layout)]
+		// Note: despite the name, this test drives Tall mode by raising MinWideModeWidth
+		// (via WideModeStepper) above the screen width so Wide mode is no longer eligible.
+		// MinTallModeHeight is a separate threshold that controls when Tall mode is valid.
 		public void TwoPaneView_TallMode_UsingMinTallModeHeight()
 		{
 			App.WaitForElement("Options");
 			App.Tap("Options");
 
-			// Increase MinWidelModeHeight above screen height to force Tall mode.
+			// Increase MinWideModeWidth above screen width to force Tall mode.
 			App.IncreaseStepper("WideModeStepper");
 			App.IncreaseStepper("WideModeStepper");
 			App.IncreaseStepper("WideModeStepper");
@@ -254,9 +257,9 @@ namespace Microsoft.Maui.TestCases.Tests
 			var pane1Y = App.WaitForElement("Pane1Label").GetRect().Y;
 			var pane2Y = App.WaitForElement("Pane2Label").GetRect().Y;
 
-			Assert.That(pane2Y, Is.GreaterThan(pane1Y), "Pane2 should be below Pane1 when MinTallModeHeight forces Tall mode");
+			Assert.That(pane2Y, Is.GreaterThan(pane1Y), "Pane2 should be below Pane1 when MinWideModeWidth forces Tall mode");
 			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Tall Mode"),
-				"CurrentModeLabel should display 'Tall Mode' when MinTallModeHeight exceeds screen height");
+				"CurrentModeLabel should display 'Tall Mode' when MinWideModeWidth exceeds screen width");
 		}
 
 		[Test, Order(13)]
