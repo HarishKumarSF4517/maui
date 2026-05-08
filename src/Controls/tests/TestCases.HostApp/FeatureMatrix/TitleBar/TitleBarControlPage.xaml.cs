@@ -83,8 +83,7 @@ public partial class TitleBarControlPage : ContentPage
 
 	private void OnResetButtonClicked(object sender, EventArgs e)
 	{
-		_viewModel = new TitleBarViewModel();
-		this.BindingContext = _viewModel;
+		_viewModel.ResetToDefaults();
 
 		FlowDirectionRTLCheckBox.IsChecked = false;
 
