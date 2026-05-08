@@ -489,6 +489,42 @@ public class TitleBarViewModel : INotifyPropertyChanged
 		}
 	}
 
+	public void ResetToDefaults()
+	{
+		// Reset backing fields directly to avoid setter side-effects cascading
+		// between properties, then raise PropertyChanged for all bindings.
+		_titleBarContent = null;
+		_title = null;
+		_subtitle = null;
+		_trailingContent = null;
+		_foregroundColor = Colors.Black;
+		_icon = null;
+		_isTitleBarContentVisible = false;
+		_isSearchBarChecked = false;
+		_isHorizontalStackLayoutChecked = false;
+		_isGridWithProgressBarChecked = false;
+		_color = Color.FromArgb("#6600ff");
+		_isRedChecked = false;
+		_isOrangeChecked = false;
+		_isVisible = true;
+		_flowDirection = FlowDirection.LeftToRight;
+		_showLeadingContent = false;
+		_leadingContent = null;
+		_showTrailingContent = false;
+		_showTitle = false;
+		_showSubtitle = false;
+		_showForegroundColor = false;
+		_isWhiteForegroundChecked = false;
+		_showIcon = false;
+		_showBackgroundColor = false;
+		_isSmallHeightChecked = false;
+		_isLargeHeightChecked = false;
+		_heightRequest = 60;
+
+		// Notify all bindings that every property may have changed.
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
+	}
+
 	public event PropertyChangedEventHandler PropertyChanged;
 	protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
 	{
