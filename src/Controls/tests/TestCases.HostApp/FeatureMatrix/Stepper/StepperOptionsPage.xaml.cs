@@ -3,11 +3,11 @@ using Microsoft.Maui.Controls;
 
 namespace Maui.Controls.Sample;
 
-public partial class StepperFeaturePage : ContentPage
+public partial class StepperOptionsPage : ContentPage
 {
 	private StepperViewModel _viewModel;
 
-	public StepperFeaturePage(StepperViewModel viewModel)
+	public StepperOptionsPage(StepperViewModel viewModel)
 	{
 		InitializeComponent();
 		_viewModel = viewModel;
