@@ -13,7 +13,7 @@
        </ContentPage.ToolbarItems>
 
        <Grid Padding="20"
-             RowDefinitions="*, Auto, Auto, Auto, Auto, Auto, Auto"
+             RowDefinitions="*, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
              ColumnDefinitions="*,*"
              RowSpacing="10"
              ColumnSpacing="10"
@@ -50,7 +50,6 @@
                      VerticalTextAlignment="Center"
                      HorizontalTextAlignment="End"/>
 
-
               <!-- Maximum Value -->
               <Label Grid.Row="2"
                      Grid.Column="0"
@@ -66,14 +65,29 @@
                      VerticalTextAlignment="Center"
                      HorizontalTextAlignment="End"/>
 
-              <!-- Current Value -->
+              <!-- Increment Value -->
               <Label Grid.Row="3"
+                     Grid.Column="0"
+                     Text="Increment:"
+                     FontSize="16"
+                     VerticalTextAlignment="Center"
+                     HorizontalTextAlignment="Start"/>
+              <Label Grid.Row="3"
+                     Grid.Column="1"
+                     AutomationId="IncrementLabel"
+                     Text="{Binding Increment, StringFormat='{0:F2}'}"
+                     FontSize="16"
+                     VerticalTextAlignment="Center"
+                     HorizontalTextAlignment="End"/>
+
+              <!-- Current Value -->
+              <Label Grid.Row="4"
                      Grid.Column="0"
                      Text="Value:"
                      FontSize="16"
                      VerticalTextAlignment="Center"
                      HorizontalTextAlignment="Start"/>
-              <Label Grid.Row="3"
+              <Label Grid.Row="4"
                      Grid.Column="1"
                      AutomationId="ValueLabel"
                      Text="{Binding Value, StringFormat='{0:F2}'}"
@@ -81,14 +95,14 @@
                      VerticalTextAlignment="Center"
                      HorizontalTextAlignment="End"/>
 
-              <Label Grid.Row="4"
+              <Label Grid.Row="5"
                      Grid.Column="0"
                      Text="ValueChanged Event : "
                      FontSize="16"
                      VerticalTextAlignment="Center"
                      HorizontalTextAlignment="Start"/>
 
-              <Label Grid.Row="4"
+              <Label Grid.Row="5"
                      Grid.Column="1"
                      AutomationId="ValueChangedEventLabel"
                      Text="{Binding ValueChangedText}"
@@ -97,12 +111,12 @@
                      HorizontalTextAlignment="End"/>
 
               <!-- Old Value -->
-              <Label Grid.Row="5"
+              <Label Grid.Row="6"
                      Grid.Column="0"
                      Text="Old Value:"
                      FontSize="16"/>
 
-              <Label Grid.Row="5"
+              <Label Grid.Row="6"
                      Grid.Column="1"
                      AutomationId="OldValueLabel"
                      Text="{Binding OldValue, StringFormat='{0:F2}'}"
@@ -110,12 +124,12 @@
                      HorizontalTextAlignment="End"/>
 
               <!-- New Value -->
-              <Label Grid.Row="6"
+              <Label Grid.Row="7"
                      Grid.Column="0"
                      Text="New Value:"
                      FontSize="16"/>
 
-              <Label Grid.Row="6"
+              <Label Grid.Row="7"
                      Grid.Column="1"
                      AutomationId="NewValueLabel"
                      Text="{Binding NewValue, StringFormat='{0:F2}'}"

@@ -31,7 +31,7 @@ public partial class StepperControlMainPage : ContentPage
 	{
 		BindingContext = _viewModel = new StepperViewModel();
 		_viewModel.ValueChangedText = "Not Raised";
-		await Navigation.PushAsync(new StepperFeaturePage(_viewModel));
+		await Navigation.PushAsync(new StepperOptionsPage(_viewModel));
 	}
 	private void StepperControl_ValueChanged(object sender, ValueChangedEventArgs e)
 	{
