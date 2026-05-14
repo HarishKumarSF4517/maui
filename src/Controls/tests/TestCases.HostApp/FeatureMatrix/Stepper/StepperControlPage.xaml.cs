@@ -5,7 +5,6 @@ namespace Maui.Controls.Sample;
 
 public class StepperControlPage : NavigationPage
 {
-
 	public StepperControlPage()
 	{
 		PushAsync(new StepperControlMainPage());
@@ -14,7 +13,6 @@ public class StepperControlPage : NavigationPage
 public partial class StepperControlMainPage : ContentPage
 {
 	private StepperViewModel _viewModel;
-
 	public StepperControlMainPage()
 	{
 		InitializeComponent();
@@ -29,8 +27,7 @@ public partial class StepperControlMainPage : ContentPage
 
 	private async void NavigateToOptionsPage_Clicked(object sender, EventArgs e)
 	{
-		BindingContext = _viewModel = new StepperViewModel();
-		_viewModel.ValueChangedText = "Not Raised";
+		_viewModel.ResetToDefaults();
 		await Navigation.PushAsync(new StepperOptionsPage(_viewModel));
 	}
 	private void StepperControl_ValueChanged(object sender, ValueChangedEventArgs e)
