@@ -78,6 +78,20 @@ public class StepperViewModel : INotifyPropertyChanged
 		set => SetProperty(ref _newValue, value);
 	}
 
+	public void ResetToDefaults()
+	{
+		Minimum = 0;
+		Maximum = 10;
+		Increment = 1;
+		Value = 0;
+		ValueChangedText = "Not Raised";
+		IsEnabled = true;
+		IsVisible = true;
+		FlowDirection = FlowDirection.LeftToRight;
+		OldValue = 0;
+		NewValue = 0;
+	}
+
 
 	public event PropertyChangedEventHandler PropertyChanged;
 
