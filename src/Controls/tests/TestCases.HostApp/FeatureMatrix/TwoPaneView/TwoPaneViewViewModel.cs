@@ -8,8 +8,8 @@ public class TwoPaneViewViewModel : INotifyPropertyChanged
 	public event PropertyChangedEventHandler PropertyChanged;
 	private GridLength _pane1Length = new GridLength(1, GridUnitType.Star);
 	private GridLength _pane2Length = new GridLength(1, GridUnitType.Star);
-	private double _minTallModeHeight = 500;
-	private double _minWideModeWidth = 700;
+	private double _minTallModeHeight = 50;
+	private double _minWideModeWidth = 70;
 	private bool _isShadowEnabled = false;
 	private bool _isVisible = true;
 	private FlowDirection _flowDirection = FlowDirection.LeftToRight;
@@ -194,8 +194,8 @@ public class TwoPaneViewViewModel : INotifyPropertyChanged
 	{
 		Pane1Length = new GridLength(1, GridUnitType.Star);
 		Pane2Length = new GridLength(1, GridUnitType.Star);
-		MinTallModeHeight = 500;
-		MinWideModeWidth = 700;
+		MinTallModeHeight = 50;
+		MinWideModeWidth = 70;
 		IsShadowEnabled = false;
 		IsVisible = true;
 		FlowDirection = FlowDirection.LeftToRight;

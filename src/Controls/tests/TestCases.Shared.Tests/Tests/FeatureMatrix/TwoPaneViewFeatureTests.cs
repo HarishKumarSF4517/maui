@@ -1,8 +1,10 @@
 using NUnit.Framework;
 using UITest.Appium;
 using UITest.Core;
+
 namespace Microsoft.Maui.TestCases.Tests
 {
+	[Category(UITestCategories.Layout)]
 	public class TwoPaneViewFeatureTests : _GalleryUITest
 	{
 		public const string TwoPaneViewFeatureMatrix = "TwoPaneView Feature Matrix";
@@ -13,132 +15,7 @@ namespace Microsoft.Maui.TestCases.Tests
 		{
 		}
 
-		// The test cases below are divided based on platform-specific UI behaviors and layout logic.
-		//
-		// For MACCATALYST and WINDOWS:
-		// - Increase WideModeStepper to switch to Tall Mode (Pane1 above Pane2)
-		// - Use Y position to validate layout changes
-		//
-		// For ANDROID and IOS:
-		// - Decrease WideModeStepper to switch to Wide Mode (Pane1 beside Pane2)
-		// - Use X position to validate layout changes
-		// - Extra checks for RTL and shadow are included
-		//
-		// Common tests:
-		// - FlowDirection, visibility, shadow, and pane size changes are tested on all platforms
-		//   with minor differences in interactions.
-
-#if MACCATALYST || WINDOWS
-		[Test, Order(16)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_RTLFlowDirection()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.WaitForElement("FlowDirectionRTLCheckBox");
-			App.Tap("FlowDirectionRTLCheckBox");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-		}
-
 		[Test, Order(1)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_WideMode()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-		}
-
-		[Test, Order(2)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_IsTall_UsingRect()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.IncreaseStepper("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			var pane1Y = App.WaitForElement("Pane1Label").GetRect().Y;
-			var pane2Y = App.WaitForElement("Pane2Label").GetRect().Y;
-
-			Assert.That(pane2Y, Is.GreaterThan(pane1Y), "Pane2 should be below Pane1 in Tall mode");
-
-			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Tall Mode"), "CurrentModeLabel should display 'Tall Mode'");
-		}
-
-		[Test, Order(3)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_Wide_UsingRect()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			var pane1X = App.WaitForElement("Pane1Label").GetRect().X;
-			var pane2X = App.WaitForElement("Pane2Label").GetRect().X;
-
-			Assert.That(pane2X, Is.GreaterThan(pane1X), "Pane2 should be to the right of Pane1 in Wide mode");
-
-			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Wide Mode"));
-		}
-
-		[Test, Order(17)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_IsWideWithRTL_UsingRect()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.DecreaseStepper("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-
-			App.WaitForElement("FlowDirectionRTLCheckBox");
-			App.Tap("FlowDirectionRTLCheckBox");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			var pane1X = App.WaitForElement("Pane1Label").GetRect().X;
-			var pane2X = App.WaitForElement("Pane2Label").GetRect().X;
-
-			Assert.That(pane1X, Is.GreaterThan(pane2X), "Pane1 should be to the right of Pane2 in RTL Wide mode");
-
-			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Wide Mode"), "CurrentModeLabel should display 'Wide Mode'");
-		}
-
-		[Test, Order(4)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_TallMode()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.IncreaseStepper("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-		}
-
-		[Test, Order(5)]
-		[Category(UITestCategories.Layout)]
 		public void TwoPaneView_Pane1Priority()
 		{
 			App.WaitForElement("Options");
@@ -156,8 +33,7 @@ namespace Microsoft.Maui.TestCases.Tests
 			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 		}
 
-		[Test, Order(6)]
-		[Category(UITestCategories.Layout)]
+		[Test, Order(2)]
 		public void TwoPaneView_Pane2Priority()
 		{
 			App.WaitForElement("Options");
@@ -178,54 +54,15 @@ namespace Microsoft.Maui.TestCases.Tests
 			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 		}
 
-		[Test, Order(7)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_Pane1SizeIncrease_WithTallMode()
+
+		[Test, Order(3)]
+		public void TwoPaneView_SinglePane_Pane1()
 		{
 			App.WaitForElement("Options");
 			App.Tap("Options");
+			App.WaitForElement("TallModeSinglePaneRadio");
+			App.Tap("TallModeSinglePaneRadio");
 
-			App.IncreaseStepper("Pane1LengthStepper");
-			App.IncreaseStepper("Pane1LengthStepper");
-
-			App.IncreaseStepper("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-		}
-
-		[Test, Order(8)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_Pane2SizeIncrease_WithTallMode()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.IncreaseStepper("Pane2LengthStepper");
-			App.IncreaseStepper("Pane2LengthStepper");
-
-			App.IncreaseStepper("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-		}
-
-		[Test, Order(9)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_SinglePane()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			// Setting WideModeConfiguration to SinglePane forces single-pane display.
-			// The Window Mode label only ever shows "Tall Mode" or "Wide Mode" and
-			// collapses SinglePane to "Tall Mode".
 			App.WaitForElement("WideModeSinglePaneRadio");
 			App.Tap("WideModeSinglePaneRadio");
 
@@ -236,47 +73,12 @@ namespace Microsoft.Maui.TestCases.Tests
 				"CurrentModeLabel should display 'Tall Mode' when WideModeConfiguration is SinglePane");
 		}
 
-		[Test, Order(12)]
-		[Category(UITestCategories.Layout)]
-		// Note: despite the name, this test drives Tall mode by raising MinWideModeWidth
-		// (via WideModeStepper) above the screen width so Wide mode is no longer eligible.
-		// MinTallModeHeight is a separate threshold that controls when Tall mode is valid.
-		public void TwoPaneView_TallMode_UsingMinTallModeHeight()
+
+		[Test, Order(4)]
+		public void TwoPaneView_SinglePane_Pane2()
 		{
 			App.WaitForElement("Options");
 			App.Tap("Options");
-
-			// Increase MinWideModeWidth above screen width to force Tall mode.
-			App.IncreaseStepper("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			var pane1Y = App.WaitForElement("Pane1Label").GetRect().Y;
-			var pane2Y = App.WaitForElement("Pane2Label").GetRect().Y;
-
-			Assert.That(pane2Y, Is.GreaterThan(pane1Y), "Pane2 should be below Pane1 when MinWideModeWidth forces Tall mode");
-			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Tall Mode"),
-				"CurrentModeLabel should display 'Tall Mode' when MinWideModeWidth exceeds screen width");
-		}
-
-		[Test, Order(13)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_Pane2Priority_WithWideMode()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			// Force Wide mode by setting MinWideModeWidth below screen width.
-			App.DecreaseStepper("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-
-			// Both Tall and Wide configurations must be SinglePane so that the mode-resolution
-			// logic in TwoPaneView.UpdateMode() falls through to the PanePriority-driven default.
-			// Otherwise (e.g. only WideMode=SinglePane), the layout collapses to Tall mode on
-			// single-screen devices and PanePriority is ignored.
 			App.WaitForElement("TallModeSinglePaneRadio");
 			App.Tap("TallModeSinglePaneRadio");
 
@@ -289,18 +91,110 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
 
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Tall Mode"),
+				"CurrentModeLabel should display 'Tall Mode' when WideModeConfiguration is SinglePane");
 		}
 
-		[Test, Order(10)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_Pane1SizeIncrease_WithWideMode()
+
+		[Test, Order(5)]
+		public void TwoPaneView_IsWide_UsingRect()
 		{
 			App.WaitForElement("Options");
 			App.Tap("Options");
 
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			var pane1X = App.WaitForElement("Pane1Label").GetRect().X;
+			var pane2X = App.WaitForElement("Pane2Label").GetRect().X;
+
+			Assert.That(pane2X, Is.GreaterThan(pane1X), "Pane2 should be to the right of Pane1 in Wide mode");
+			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Wide Mode"), "CurrentModeLabel should display 'Wide Mode'");
+		}
+
+		[Test, Order(6)]
+		public void TwoPaneView_IsTall_UsingRect()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
+
+			App.WaitForElement("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
+			App.WaitForElement("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
+
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			var pane1Y = App.WaitForElement("Pane1Label").GetRect().Y;
+			var pane2Y = App.WaitForElement("Pane2Label").GetRect().Y;
+
+			Assert.That(pane2Y, Is.GreaterThan(pane1Y), "Pane2 should be below Pane1 in Tall mode");
+			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Tall Mode"), "CurrentModeLabel should display 'Tall Mode'");
+		}
+
+		[Test, Order(7)]
+		public void TwoPaneView_RTLFlowDirection()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
+
+			App.WaitForElement("FlowDirectionRTLCheckBox");
+			App.Tap("FlowDirectionRTLCheckBox");
+
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+		}
+
+
+		[Test, Order(8)]
+		public void TwoPaneView_WithRTL_UsingRect()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
+
+			App.WaitForElement("FlowDirectionRTLCheckBox");
+			App.Tap("FlowDirectionRTLCheckBox");
+
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			var pane1X = App.WaitForElement("Pane1Label").GetRect().X;
+			var pane2X = App.WaitForElement("Pane2Label").GetRect().X;
+
+			Assert.That(pane1X, Is.GreaterThan(pane2X), "Pane1 should be to the right of Pane2 in RTL Wide mode");
+			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Wide Mode"), "CurrentModeLabel should display 'Wide Mode'");
+		}
+
+		[Test, Order(9)]
+		public void TwoPaneView_Pane1SizeIncrease_WideMode()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
+
+			App.WaitForElement("Pane1LengthLabel");
 			App.IncreaseStepper("Pane1LengthStepper");
+			App.WaitForElement("Pane1LengthLabel");
 			App.IncreaseStepper("Pane1LengthStepper");
+
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+		}
+
+		[Test, Order(10)]
+		public void TwoPaneView_Pane2SizeIncrease_WideMode()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
+
+			App.WaitForElement("Pane2LengthLabel");
+			App.IncreaseStepper("Pane2LengthStepper");
+			App.WaitForElement("Pane2LengthLabel");
+			App.IncreaseStepper("Pane2LengthStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
@@ -309,14 +203,20 @@ namespace Microsoft.Maui.TestCases.Tests
 		}
 
 		[Test, Order(11)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_Pane2SizeIncrease_WithWideMode()
+		public void TwoPaneView_Pane1SizeIncrease_TallMode()
 		{
 			App.WaitForElement("Options");
 			App.Tap("Options");
 
-			App.IncreaseStepper("Pane2LengthStepper");
-			App.IncreaseStepper("Pane2LengthStepper");
+			App.WaitForElement("Pane1LengthStepper");
+			App.IncreaseStepper("Pane1LengthStepper");
+			App.WaitForElement("Pane1LengthStepper");
+			App.IncreaseStepper("Pane1LengthStepper");
+
+			App.WaitForElement("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
+			App.WaitForElement("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
@@ -324,10 +224,93 @@ namespace Microsoft.Maui.TestCases.Tests
 			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 		}
 
-#endif
+		[Test, Order(12)]
+		public void TwoPaneView_Pane2SizeIncrease_TallMode()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
 
-		[Test, Order(20)]
-		[Category(UITestCategories.Layout)]
+			App.WaitForElement("Pane2LengthStepper");
+			App.IncreaseStepper("Pane2LengthStepper");
+			App.WaitForElement("Pane2LengthStepper");
+			App.IncreaseStepper("Pane2LengthStepper");
+
+			App.WaitForElement("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
+			App.WaitForElement("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
+
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+		}
+
+		[Test, Order(13)]
+		public void TwoPaneView_WideMode()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
+
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+		}
+
+		[Test, Order(14)]
+		public void TwoPaneView_TallMode()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
+
+			App.WaitForElement("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
+			App.WaitForElement("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
+
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+		}
+
+		[Test, Order(15)]
+		public void TwoPaneView_IsShadowWithTallMode()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
+
+			App.WaitForElement("ShadowCheckBox");
+			App.Tap("ShadowCheckBox");
+
+			App.WaitForElement("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
+			App.WaitForElement("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
+
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+		}
+
+		[Test, Order(16)]
+		public void TwoPaneView_ShadowWithWideMode()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
+
+			App.WaitForElement("ShadowCheckBox");
+			App.Tap("ShadowCheckBox");
+
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+		}
+
+		[Test, Order(17)]
 		public void TwoPaneView_IsVisible()
 		{
 			App.WaitForElement("Options");
@@ -342,9 +325,8 @@ namespace Microsoft.Maui.TestCases.Tests
 			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 		}
 
-		[Test, Order(23)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_IsShadowEnabled()
+		[Test, Order(18)]
+		public void TwoPaneView_Pane1SizeIncrease_WideModeWithShadow()
 		{
 			App.WaitForElement("Options");
 			App.Tap("Options");
@@ -352,23 +334,55 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.WaitForElement("ShadowCheckBox");
 			App.Tap("ShadowCheckBox");
 
+			App.WaitForElement("Pane1LengthLabel");
+			App.IncreaseStepper("Pane1LengthStepper");
+			App.WaitForElement("Pane1LengthLabel");
+			App.IncreaseStepper("Pane1LengthStepper");
+
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
 
 			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 		}
 
-		[Test, Order(22)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_Pane1SizeIncrease()
+		[Test, Order(19)]
+		public void TwoPaneView_Pane2SizeIncrease_WideModeWithShadow()
 		{
 			App.WaitForElement("Options");
 			App.Tap("Options");
 
-			App.WaitForElement("Pane1LengthLabel");
+			App.WaitForElement("ShadowCheckBox");
+			App.Tap("ShadowCheckBox");
+
+			App.WaitForElement("Pane2LengthLabel");
+			App.IncreaseStepper("Pane2LengthStepper");
+			App.WaitForElement("Pane2LengthLabel");
+			App.IncreaseStepper("Pane2LengthStepper");
+
+			App.WaitForElement("Apply");
+			App.Tap("Apply");
+
+			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+		}
+
+		[Test, Order(20)]
+		public void TwoPaneView_Pane1SizeIncrease_TallModeWithShadow()
+		{
+			App.WaitForElement("Options");
+			App.Tap("Options");
+
+			App.WaitForElement("ShadowCheckBox");
+			App.Tap("ShadowCheckBox");
+
+			App.WaitForElement("Pane1LengthStepper");
 			App.IncreaseStepper("Pane1LengthStepper");
-			App.WaitForElement("Pane1LengthLabel");
+			App.WaitForElement("Pane1LengthStepper");
 			App.IncreaseStepper("Pane1LengthStepper");
+
+			App.WaitForElement("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
+			App.WaitForElement("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
@@ -377,167 +391,7 @@ namespace Microsoft.Maui.TestCases.Tests
 		}
 
 		[Test, Order(21)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_Pane2SizeIncrease()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.WaitForElement("Pane2LengthLabel");
-			App.IncreaseStepper("Pane2LengthStepper");
-			App.WaitForElement("Pane2LengthLabel");
-			App.IncreaseStepper("Pane2LengthStepper");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-		}
-
-#if ANDROID || IOS
-
-		[Test, Order(1)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_IsTall_UsingRect()
-		{
-			var pane1Y = App.WaitForElement("Pane1Label").GetRect().Y;
-			var pane2Y = App.WaitForElement("Pane2Label").GetRect().Y;
-
-			Assert.That(pane2Y, Is.GreaterThan(pane1Y), "Pane2 should be below Pane1 in Tall mode");
-
-			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Tall Mode"), "CurrentModeLabel should display 'Tall Mode'");
-		}
-
-		[Test, Order(2)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_IsWide_UsingRect()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			var pane1X = App.WaitForElement("Pane1Label").GetRect().X;
-			var pane2X = App.WaitForElement("Pane2Label").GetRect().X;
-
-			Assert.That(pane2X, Is.GreaterThan(pane1X), "Pane2 should be to the right of Pane1 in Wide mode");
-
-			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Wide Mode"), "CurrentModeLabel should display 'Wide Mode'");
-
-		}
-
-		[Test, Order(3)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_IsWideWithRTL_UsingRect()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-
-			App.WaitForElement("FlowDirectionRTLCheckBox");
-			App.Tap("FlowDirectionRTLCheckBox");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			var pane1X = App.WaitForElement("Pane1Label").GetRect().X;
-			var pane2X = App.WaitForElement("Pane2Label").GetRect().X;
-
-			Assert.That(pane1X, Is.GreaterThan(pane2X), "Pane1 should be to the right of Pane2 in RTL Wide mode");
-
-			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Wide Mode"), "CurrentModeLabel should display 'Wide Mode'");
-		}
-
-		[Test, Order(4)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_TallMode()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-		}
-
-		[Test, Order(5)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_WideMode()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-		}
-
-		[Test, Order(6)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_Pane1SizeIncrease_WithWideMode()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.WaitForElement("Pane1LengthStepper");
-			App.IncreaseStepper("Pane1LengthStepper");
-			App.WaitForElement("Pane1LengthStepper");
-			App.IncreaseStepper("Pane1LengthStepper");
-
-			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-		}
-
-		[Test, Order(7)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_Pane2SizeIncrease_WithWideMode()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.WaitForElement("Pane2LengthStepper");
-			App.IncreaseStepper("Pane2LengthStepper");
-			App.WaitForElement("Pane2LengthStepper");
-			App.IncreaseStepper("Pane2LengthStepper");
-
-			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-		}
-
-		[Test, Order(8)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_ShadowWithWideMode()
+		public void TwoPaneView_Pane2SizeIncrease_TallModeWithShadow()
 		{
 			App.WaitForElement("Options");
 			App.Tap("Options");
@@ -545,124 +399,20 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.WaitForElement("ShadowCheckBox");
 			App.Tap("ShadowCheckBox");
 
+			App.WaitForElement("Pane2LengthStepper");
+			App.IncreaseStepper("Pane2LengthStepper");
+			App.WaitForElement("Pane2LengthStepper");
+			App.IncreaseStepper("Pane2LengthStepper");
+
 			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
 			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
+			App.IncreaseStepper("WideModeStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
 
 			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 		}
-
-		[Test, Order(9)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_RTLFlowDirection()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-
-			App.WaitForElement("FlowDirectionRTLCheckBox");
-			App.Tap("FlowDirectionRTLCheckBox");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-		}
-
-
-		[Test, Order(10)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_Pane1Priority()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.WaitForElement("TallModeSinglePaneRadio");
-			App.Tap("TallModeSinglePaneRadio");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-		}
-
-		[Test, Order(11)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_Pane2Priority()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			App.WaitForElement("TallModeSinglePaneRadio");
-			App.Tap("TallModeSinglePaneRadio");
-
-			App.WaitForElement("PanePriorityPane2Radio");
-			App.Tap("PanePriorityPane2Radio");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-		}
-		[Test, Order(18)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_SinglePane()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			// Setting TallModeConfiguration to SinglePane forces single-pane display.
-			// The Window Mode label only ever shows "Tall Mode" or "Wide Mode" and
-			// collapses SinglePane to "Tall Mode".
-			App.WaitForElement("TallModeSinglePaneRadio");
-			App.Tap("TallModeSinglePaneRadio");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			Assert.That(App.WaitForElement("CurrentModeLabel").GetText(), Is.EqualTo("Tall Mode"),
-				"CurrentModeLabel should display 'Tall Mode' when TallModeConfiguration is SinglePane");
-		}
-
-		[Test, Order(19)]
-		[Category(UITestCategories.Layout)]
-		public void TwoPaneView_Pane2Priority_WithWideMode()
-		{
-			App.WaitForElement("Options");
-			App.Tap("Options");
-
-			// Force the device into Wide mode by lowering MinWideModeWidth below the screen width.
-			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-			App.WaitForElement("WideModeStepper");
-			App.DecreaseStepper("WideModeStepper");
-
-			// Both Tall and Wide configurations must be SinglePane so that the mode-resolution
-			// logic in TwoPaneView.UpdateMode() falls through to the PanePriority-driven default.
-			// Otherwise (e.g. only WideMode=SinglePane), the layout collapses to Tall mode on
-			// single-screen devices and PanePriority is ignored.
-			App.WaitForElement("TallModeSinglePaneRadio");
-			App.Tap("TallModeSinglePaneRadio");
-
-			App.WaitForElement("WideModeSinglePaneRadio");
-			App.Tap("WideModeSinglePaneRadio");
-
-			App.WaitForElement("PanePriorityPane2Radio");
-			App.Tap("PanePriorityPane2Radio");
-
-			App.WaitForElement("Apply");
-			App.Tap("Apply");
-
-			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-		}
-#endif
 	}
 }
