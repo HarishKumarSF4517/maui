@@ -37,7 +37,7 @@
                      <Stepper x:Name="WideModeStepper"
                               Maximum="1500"
                               Minimum="0"
-                              Increment="200"
+                              Increment="500"
                               ValueChanged="OnWideModeWidthChanged"
                               HorizontalOptions="Start"
                               AutomationId="WideModeStepper"/>
