@@ -118,10 +118,8 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.WaitForElement("Options");
 			App.Tap("Options");
 
-			App.WaitForElement("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
-			App.WaitForElement("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
+			ChangeStepper("WideModeStepper");
+			ChangeStepper("WideModeStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
@@ -174,10 +172,8 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.WaitForElement("Options");
 			App.Tap("Options");
 
-			App.WaitForElement("Pane1LengthLabel");
-			App.IncreaseStepper("Pane1LengthStepper");
-			App.WaitForElement("Pane1LengthLabel");
-			App.IncreaseStepper("Pane1LengthStepper");
+			ChangeStepper("Pane1LengthStepper");
+			ChangeStepper("Pane1LengthStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
@@ -191,10 +187,8 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.WaitForElement("Options");
 			App.Tap("Options");
 
-			App.WaitForElement("Pane2LengthLabel");
-			App.IncreaseStepper("Pane2LengthStepper");
-			App.WaitForElement("Pane2LengthLabel");
-			App.IncreaseStepper("Pane2LengthStepper");
+			ChangeStepper("Pane2LengthStepper");
+			ChangeStepper("Pane2LengthStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
@@ -208,15 +202,11 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.WaitForElement("Options");
 			App.Tap("Options");
 
-			App.WaitForElement("Pane1LengthStepper");
-			App.IncreaseStepper("Pane1LengthStepper");
-			App.WaitForElement("Pane1LengthStepper");
-			App.IncreaseStepper("Pane1LengthStepper");
+			ChangeStepper("Pane1LengthStepper");
+			ChangeStepper("Pane1LengthStepper");
 
-			App.WaitForElement("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
-			App.WaitForElement("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
+			ChangeStepper("WideModeStepper");
+			ChangeStepper("WideModeStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
@@ -230,15 +220,11 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.WaitForElement("Options");
 			App.Tap("Options");
 
-			App.WaitForElement("Pane2LengthStepper");
-			App.IncreaseStepper("Pane2LengthStepper");
-			App.WaitForElement("Pane2LengthStepper");
-			App.IncreaseStepper("Pane2LengthStepper");
+			ChangeStepper("Pane2LengthStepper");
+			ChangeStepper("Pane2LengthStepper");
 
-			App.WaitForElement("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
-			App.WaitForElement("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
+			ChangeStepper("WideModeStepper");
+			ChangeStepper("WideModeStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
@@ -264,10 +250,8 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.WaitForElement("Options");
 			App.Tap("Options");
 
-			App.WaitForElement("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
-			App.WaitForElement("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
+			ChangeStepper("WideModeStepper");
+			ChangeStepper("WideModeStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
@@ -284,10 +268,8 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.WaitForElement("ShadowCheckBox");
 			App.Tap("ShadowCheckBox");
 
-			App.WaitForElement("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
-			App.WaitForElement("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
+			ChangeStepper("WideModeStepper");
+			ChangeStepper("WideModeStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
@@ -334,10 +316,8 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.WaitForElement("ShadowCheckBox");
 			App.Tap("ShadowCheckBox");
 
-			App.WaitForElement("Pane1LengthLabel");
-			App.IncreaseStepper("Pane1LengthStepper");
-			App.WaitForElement("Pane1LengthLabel");
-			App.IncreaseStepper("Pane1LengthStepper");
+			ChangeStepper("Pane1LengthStepper");
+			ChangeStepper("Pane1LengthStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
@@ -354,10 +334,8 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.WaitForElement("ShadowCheckBox");
 			App.Tap("ShadowCheckBox");
 
-			App.WaitForElement("Pane2LengthLabel");
-			App.IncreaseStepper("Pane2LengthStepper");
-			App.WaitForElement("Pane2LengthLabel");
-			App.IncreaseStepper("Pane2LengthStepper");
+			ChangeStepper("Pane2LengthStepper");
+			ChangeStepper("Pane2LengthStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
@@ -374,15 +352,11 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.WaitForElement("ShadowCheckBox");
 			App.Tap("ShadowCheckBox");
 
-			App.WaitForElement("Pane1LengthStepper");
-			App.IncreaseStepper("Pane1LengthStepper");
-			App.WaitForElement("Pane1LengthStepper");
-			App.IncreaseStepper("Pane1LengthStepper");
+			ChangeStepper("Pane1LengthStepper");
+			ChangeStepper("Pane1LengthStepper");
 
-			App.WaitForElement("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
-			App.WaitForElement("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
+			ChangeStepper("WideModeStepper");
+			ChangeStepper("WideModeStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
@@ -399,20 +373,26 @@ namespace Microsoft.Maui.TestCases.Tests
 			App.WaitForElement("ShadowCheckBox");
 			App.Tap("ShadowCheckBox");
 
-			App.WaitForElement("Pane2LengthStepper");
-			App.IncreaseStepper("Pane2LengthStepper");
-			App.WaitForElement("Pane2LengthStepper");
-			App.IncreaseStepper("Pane2LengthStepper");
+			ChangeStepper("Pane2LengthStepper");
+			ChangeStepper("Pane2LengthStepper");
 
-			App.WaitForElement("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
-			App.WaitForElement("WideModeStepper");
-			App.IncreaseStepper("WideModeStepper");
+			ChangeStepper("WideModeStepper");
+			ChangeStepper("WideModeStepper");
 
 			App.WaitForElement("Apply");
 			App.Tap("Apply");
 
 			VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+		}
+
+		private void ChangeStepper(string stepperAutomationId)
+		{
+#if WINDOWS
+			App.IncreaseStepper(stepperAutomationId);
+#else
+			App.WaitForElement(stepperAutomationId);
+			App.IncreaseStepper(stepperAutomationId);
+#endif
 		}
 	}
 }
