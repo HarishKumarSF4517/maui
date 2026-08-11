@@ -15,18 +15,23 @@
               <VerticalStackLayout x:Name="DatePickerLayout"
                                    Padding="20,100,20,100">
                      <DatePicker AutomationId="DatePickerControl"
+                                 Background="{Binding Background}"
                                  CharacterSpacing="{Binding CharacterSpacing}"
+                                 Closed="OnClosed"
                                  Date="{Binding Date}"
                                  DateSelected="OnDateSelected"
                                  FlowDirection="{Binding FlowDirection}"
                                  Format="{Binding Format}"
                                  FontAttributes="{Binding FontAttributes}"
+                                 FontAutoScalingEnabled="{Binding FontAutoScalingEnabled}"
                                  FontFamily="{Binding FontFamily}"
                                  FontSize="{Binding FontSize}"
                                  IsEnabled="{Binding IsEnabled}"
+                                 IsOpen="{Binding IsOpen}"
                                  IsVisible="{Binding IsVisible}"
                                  MinimumDate="{Binding MinimumDate}"
                                  MaximumDate="{Binding MaximumDate}"
+                                 Opened="OnOpened"
                                  Shadow="{Binding Shadow}"
                                  TextColor="{Binding TextColor}"/>
               </VerticalStackLayout>
@@ -42,6 +47,15 @@
                      <Label Text="Old Date: "/>
                      <Label x:Name="OldDateSelectedLabel"
                             AutomationId="OldDateSelectedLabel"/>
+              </HorizontalStackLayout>
+
+              <Label Text="Opened/Closed Event"
+                     FontAttributes="Bold"
+                     HorizontalOptions="Center"/>
+              <HorizontalStackLayout HorizontalOptions="Center">
+                     <Label Text="Dropdown State: "/>
+                     <Label x:Name="DropdownStateLabel"
+                            AutomationId="DropdownStateLabel"/>
               </HorizontalStackLayout>
 
               <Label Text="Culture Format Display"

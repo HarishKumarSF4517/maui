@@ -613,4 +613,48 @@ public class DatePickerFeatureTests : _GalleryUITest
 #endif
 	}
 #endif
+
+#if TEST_FAILS_ON_ANDROID // The DatePicker occupies the Screen and not able to access the label behind
+	[Test, Order(30)]
+	[Category(UITestCategories.DatePicker)]
+	public void DatePicker_SetIsOpen_VerifyOpenedEventFires()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("IsOpenTrueRadioButton");
+		App.Tap("IsOpenTrueRadioButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElementTillPageNavigationSettled("DatePickerControl");
+		Assert.That(App.WaitForElement("DropdownStateLabel").GetText(), Is.EqualTo("Opened"));
+	}
+#endif
+
+	[Test, Order(31)]
+	[Category(UITestCategories.DatePicker)]
+	public void DatePicker_SetFontAutoScalingEnabled_VerifyVisualState()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("FontAutoScalingEnabledFalseRadioButton");
+		App.Tap("FontAutoScalingEnabledFalseRadioButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElementTillPageNavigationSettled("DatePickerControl");
+		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+	}
+
+	[Test, Order(32)]
+	[Category(UITestCategories.DatePicker)]
+	public void DatePicker_SetBackground_VerifyVisualState()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("BackgroundYellowButton");
+		App.Tap("BackgroundYellowButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElementTillPageNavigationSettled("DatePickerControl");
+		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+	}
 }

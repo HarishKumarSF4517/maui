@@ -11,9 +11,9 @@
                            Clicked="ApplyButton_Clicked"/>
        </ContentPage.ToolbarItems>
        <Grid ColumnSpacing="0"
-             RowSpacing="5"
+             RowSpacing="2"
              Padding="10,5,0,0"
-             RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+             RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
              ColumnDefinitions="Auto,Auto"
              HorizontalOptions="Center">
 
@@ -227,7 +227,7 @@
                      VerticalOptions="Center"/>
               <RadioButton Grid.Row="11"
                            Grid.Column="1"
-                           x:Name="ShadowFalseRadio"
+                           x:Name="ShadowTrueRadio"
                            VerticalOptions="Center"
                            AutomationId="ShadowTrueRadioButton"
                            GroupName="Shadow"
@@ -262,7 +262,7 @@
                      VerticalOptions="Center"/>
               <HorizontalStackLayout Grid.Row="13"
                                      Grid.Column="1"
-                                     Spacing="10"
+                                     Spacing="5"
                                      VerticalOptions="Center">
                      <Button AutomationId="CultureUsButton"
                              Clicked="OnCultureButtonClicked"
@@ -276,6 +276,50 @@
                      <Button AutomationId="CultureFiButton"
                              Clicked="OnCultureButtonClicked"
                              Text="sv-FI"/>
+              </HorizontalStackLayout>
+
+              <!-- FontAutoScalingEnabled -->
+              <Label Grid.Row="14"
+                     Grid.Column="0"
+                     Text="FontAutoScalingEnabled:"
+                     VerticalOptions="Center"/>
+              <HorizontalStackLayout Grid.Row="14"
+                                     Grid.Column="1"
+                                     Spacing="10"
+                                     VerticalOptions="Center">
+                     <RadioButton GroupName="FontAutoScalingEnabled"
+                                  AutomationId="FontAutoScalingEnabledFalseRadioButton"
+                                  Content="False"
+                                  CheckedChanged="OnFontAutoScalingEnabledRadioButtonCheckedChanged"/>
+                     <Label Text="IsOpen:"
+                            Padding="40,0,0,0"
+                            FontAttributes="Bold"
+                            VerticalOptions="Center"/>
+                     <RadioButton GroupName="IsOpen"
+                                  AutomationId="IsOpenTrueRadioButton"
+                                  Content="True"
+                                  CheckedChanged="OnIsOpenRadioButtonCheckedChanged"/>
+              </HorizontalStackLayout>
+
+              <!-- Background -->
+              <Label Grid.Row="15"
+                     Grid.Column="0"
+                     Text="Background:"
+                     VerticalOptions="Center"/>
+              <HorizontalStackLayout Grid.Row="15"
+                                     Grid.Column="1"
+                                     Spacing="10"
+                                     VerticalOptions="Center">
+                     <Button AutomationId="BackgroundYellowButton"
+                             Clicked="OnBackgroundButtonClicked"
+                             BackgroundColor="Yellow"
+                             Text="Yellow"
+                             TextColor="Black"/>
+                     <Button AutomationId="BackgroundLightBlueButton"
+                             Clicked="OnBackgroundButtonClicked"
+                             BackgroundColor="LightBlue"
+                             Text="LightBlue"
+                             TextColor="Black"/>
               </HorizontalStackLayout>
        </Grid>
 </ContentPage>
