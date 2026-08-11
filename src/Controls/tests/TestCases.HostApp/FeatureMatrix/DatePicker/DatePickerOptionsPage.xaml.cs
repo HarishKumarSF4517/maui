@@ -127,4 +127,31 @@ public partial class DatePickerOptionsPage : ContentPage
 			}
 		}
 	}
+
+	private void OnFontAutoScalingEnabledRadioButtonCheckedChanged(object sender, CheckedChangedEventArgs e)
+	{
+		var radioButton = sender as RadioButton;
+		if (radioButton != null && radioButton.IsChecked)
+		{
+			_viewModel.FontAutoScalingEnabled = false;
+		}
+	}
+
+	private void OnIsOpenRadioButtonCheckedChanged(object sender, CheckedChangedEventArgs e)
+	{
+		var radioButton = sender as RadioButton;
+		if (radioButton != null && radioButton.IsChecked)
+		{
+			_viewModel.IsOpen = true;
+		}
+	}
+
+	private void OnBackgroundButtonClicked(object sender, EventArgs e)
+	{
+		var button = sender as Button;
+		if (button != null)
+		{
+			_viewModel.Background = button.Text == "Yellow" ? new SolidColorBrush(Colors.Yellow) : new SolidColorBrush(Colors.LightBlue);
+		}
+	}
 }

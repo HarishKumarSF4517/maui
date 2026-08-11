@@ -13,13 +13,16 @@ public class DatePickerViewModel : INotifyPropertyChanged
 	private FontAttributes _fontAttributes = FontAttributes.None;
 	private string _fontFamily = null;
 	private double _fontSize = 0d;
+	private bool _fontAutoScalingEnabled = true;
 	private string _format = "d";
 	private bool _isEnabled = true;
 	private bool _isVisible = true;
+	private bool _isOpen = false;
 	private DateTime _minDate = DateTime.ParseExact("12/24/2025", "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
 	private DateTime _maxDate = DateTime.ParseExact("12/24/2027", "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
 	private Shadow _shadow;
 	private Color _textColor = Colors.Black;
+	private Brush _background;
 	private CultureInfo _culture;
 
 	public double CharacterSpacing
@@ -113,6 +116,19 @@ public class DatePickerViewModel : INotifyPropertyChanged
 		}
 	}
 
+	public bool FontAutoScalingEnabled
+	{
+		get => _fontAutoScalingEnabled;
+		set
+		{
+			if (_fontAutoScalingEnabled != value)
+			{
+				_fontAutoScalingEnabled = value;
+				OnPropertyChanged();
+			}
+		}
+	}
+
 	public bool IsEnabled
 	{
 		get => _isEnabled;
@@ -121,6 +137,19 @@ public class DatePickerViewModel : INotifyPropertyChanged
 			if (_isEnabled != value)
 			{
 				_isEnabled = value;
+				OnPropertyChanged();
+			}
+		}
+	}
+
+	public bool IsOpen
+	{
+		get => _isOpen;
+		set
+		{
+			if (_isOpen != value)
+			{
+				_isOpen = value;
 				OnPropertyChanged();
 			}
 		}
@@ -191,6 +220,19 @@ public class DatePickerViewModel : INotifyPropertyChanged
 		}
 	}
 
+	public Brush Background
+	{
+		get => _background;
+		set
+		{
+			if (_background != value)
+			{
+				_background = value;
+				OnPropertyChanged();
+			}
+		}
+	}
+
 	public CultureInfo Culture
 	{
 		get => _culture;
@@ -206,6 +248,27 @@ public class DatePickerViewModel : INotifyPropertyChanged
 
 	public DatePickerViewModel()
 	{
+		Culture = new CultureInfo("en-US");
+	}
+
+	public void ResetToDefaults()
+	{
+		CharacterSpacing = 0.0d;
+		Date = new DateTime(2025, 12, 24);
+		FlowDirection = FlowDirection.LeftToRight;
+		FontAttributes = FontAttributes.None;
+		FontFamily = null;
+		FontSize = 0d;
+		FontAutoScalingEnabled = true;
+		Format = "d";
+		IsEnabled = true;
+		IsVisible = true;
+		IsOpen = false;
+		MinimumDate = new DateTime(2025, 12, 24);
+		MaximumDate = new DateTime(2027, 12, 24);
+		Shadow = null;
+		TextColor = Colors.Black;
+		Background = null;
 		Culture = new CultureInfo("en-US");
 	}
 
