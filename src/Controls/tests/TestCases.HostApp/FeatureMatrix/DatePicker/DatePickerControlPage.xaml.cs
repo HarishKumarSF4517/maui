@@ -35,10 +35,7 @@ public partial class DatePickerMainControlPage : ContentPage
 
 	private async void NavigateToOptionsPage_Clicked(object sender, EventArgs e)
 	{
-		// Reset culture to default when navigating to options page
-		_viewModel.Culture = System.Globalization.CultureInfo.CurrentCulture;
-
-		BindingContext = _viewModel = new DatePickerViewModel();
+		_viewModel.ResetToDefaults();
 		await Navigation.PushAsync(new DatePickerOptionsPage(_viewModel));
 	}
 
@@ -65,5 +62,15 @@ public partial class DatePickerMainControlPage : ContentPage
 			OldDateSelectedLabel.Text = e.OldDate.ToString();
 			NewDateSelectedLabel.Text = e.NewDate.ToString();
 		}
+	}
+
+	public void OnOpened(object sender, DatePickerOpenedEventArgs e)
+	{
+		DropdownStateLabel.Text = "Opened";
+	}
+
+	public void OnClosed(object sender, DatePickerClosedEventArgs e)
+	{
+		DropdownStateLabel.Text = "Closed";
 	}
 }
