@@ -43,11 +43,11 @@ public partial class Issue24996 : ContentPage
 	public async void OnTapped(object sender, EventArgs e)
 	{
 		var testPoint = _translations[++_index % _translations.Length];
-		Coords.Text = $"X: {testPoint.X}, Y: {testPoint.Y}";
 		Lvl2.TranslationX = testPoint.X;
 		Lvl2.TranslationY = testPoint.Y;
 		await Task.Delay(100);
 		UpdateText();
+		Coords.Text = $"X: {testPoint.X}, Y: {testPoint.Y}";
 	}
 
 	void UpdateText()

@@ -17,12 +17,14 @@ namespace Microsoft.Maui.TestCases.Tests.Issues
 		[Category(UITestCategories.Layout)]
 		public void ChangingTranslationShouldNotCauseLayoutPassOnAncestors()
 		{
+			string[] expectedCoordinates = ["X: 40, Y: 80", "X: 1000, Y: 20", "X: 20, Y: 1000", "X: 1000, Y: 1000"];
+
 			App.WaitForElement("Stats");
 			// Tries to translate the element in different positions, on-screen and off-screen.
-			for (int i = 0; i < 4; i++)
+			foreach (string expectedCoordinate in expectedCoordinates)
 			{
 				App.Tap("Stats");
-				// Re-query element after tap to avoid stale reference and wait for UI to settle
+				App.WaitForTextToBePresentInElement("Coords", expectedCoordinate);
 				var element = App.WaitForElement("Stats");
 				ClassicAssert.True(element.GetText()!.StartsWith("Lvl1[0/0]"));
 			}
