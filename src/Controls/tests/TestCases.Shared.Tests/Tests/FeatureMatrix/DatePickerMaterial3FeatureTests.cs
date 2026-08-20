@@ -5,6 +5,7 @@ using UITest.Core;
 
 namespace Microsoft.Maui.TestCases.Tests;
 
+[Category(UITestCategories.Material3)]
 public class DatePickerMaterial3FeatureTests : _GalleryUITest
 {
 	public override string GalleryPageName => "Date Picker Feature Matrix";
@@ -14,7 +15,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(1)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_InitialState_VerifyVisualState()
 	{
 		App.WaitForElement("DatePickerControl");
@@ -25,7 +25,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(2)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_ModifyOldDateAndNewDate_VerifyVisualState()
 	{
 		App.WaitForElement("DatePickerControl");
@@ -37,7 +36,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(3)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_OldDateAndNewDate_VerifyVisualState()
 	{
 		App.WaitForElement("DatePickerControl");
@@ -56,7 +54,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(4)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetCharacterSpacingAndDate_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -71,7 +68,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(5)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_DateSelectedEvent_FiresOnDateChange()
 	{
 		App.WaitForElement("Options");
@@ -87,7 +83,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(6)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetDateAndTextColor_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -101,7 +96,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(7)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetDateAndFlowDirection_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -115,7 +109,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(8)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetFontAttributesAndFontFamily_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -131,7 +124,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(9)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetFontAttributesAndFontSize_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -148,7 +140,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(10)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetFontFamilyAndFontSize_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -165,7 +156,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(11)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetFontAttributesAndFormat_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -184,7 +174,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(12)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetFontFamilyAndFormat_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -203,7 +192,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(13)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetFontSizeAndFormat_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -225,7 +213,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(14)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetDateAndIsEnabled_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -241,7 +228,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(15)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetDateAndIsVisible_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -255,7 +241,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(16)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetDateAndShadowOpacity_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -269,7 +254,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(17)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetMinimumDateAndDate_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -293,7 +277,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(18)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetMaximumDateAndDate_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -317,7 +300,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(19)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_Format_D_LongDatePattern()
 	{
 		App.WaitForElement("Options");
@@ -334,7 +316,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(20)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_Format_f_FullDateShortTime()
 	{
 		App.WaitForElement("Options");
@@ -351,7 +332,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(21)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_Format_F_FullDateLongTime()
 	{
 		App.WaitForElement("Options");
@@ -368,7 +348,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(22)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetFontAttributesAndFormat_f_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -387,7 +366,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(23)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetFontFamilyAndFormat_f_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -406,7 +384,6 @@ public class DatePickerMaterial3FeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(24)]
-	[Category(UITestCategories.Material3)]
 	public void Material3DatePicker_SetFontSizeAndFormat_f_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
