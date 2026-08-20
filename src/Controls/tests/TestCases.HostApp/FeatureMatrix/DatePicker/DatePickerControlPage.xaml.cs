@@ -15,6 +15,8 @@ public class DatePickerControlPage : NavigationPage
 public partial class DatePickerMainControlPage : ContentPage
 {
 	private DatePickerViewModel _viewModel;
+	private int _openedCount;
+	private int _closedCount;
 
 	public DatePickerMainControlPage(DatePickerViewModel viewModel)
 	{
@@ -36,7 +38,16 @@ public partial class DatePickerMainControlPage : ContentPage
 	private async void NavigateToOptionsPage_Clicked(object sender, EventArgs e)
 	{
 		_viewModel.ResetToDefaults();
+		ResetEventState();
 		await Navigation.PushAsync(new DatePickerOptionsPage(_viewModel));
+	}
+
+	private void ResetEventState()
+	{
+		_openedCount = 0;
+		_closedCount = 0;
+		OpenedCountLabel.Text = "Opened: 0";
+		ClosedCountLabel.Text = "Closed: 0";
 	}
 
 	private void DisplayCultureSpecificDate(DateTime date, CultureInfo culture)
@@ -67,10 +78,32 @@ public partial class DatePickerMainControlPage : ContentPage
 	public void OnOpened(object sender, DatePickerOpenedEventArgs e)
 	{
 		DropdownStateLabel.Text = "Opened";
+		OpenedCountLabel.Text = $"Opened: {++_openedCount}";
 	}
 
 	public void OnClosed(object sender, DatePickerClosedEventArgs e)
 	{
 		DropdownStateLabel.Text = "Closed";
+		ClosedCountLabel.Text = $"Closed: {++_closedCount}";
+	}
+
+	private void OpenDatePickerButton_Clicked(object sender, EventArgs e)
+	{
+		_viewModel.IsOpen = true;
+	}
+
+	private void CloseDatePickerButton_Clicked(object sender, EventArgs e)
+	{
+		_viewModel.IsOpen = false;
+	}
+
+	private void FocusDatePickerButton_Clicked(object sender, EventArgs e)
+	{
+		DatePickerControl.Focus();
+	}
+
+	private void UnfocusDatePickerButton_Clicked(object sender, EventArgs e)
+	{
+		DatePickerControl.Unfocus();
 	}
 }
