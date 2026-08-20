@@ -14,7 +14,8 @@
               Spacing="20">
               <VerticalStackLayout x:Name="DatePickerLayout"
                                    Padding="20,100,20,100">
-                     <DatePicker AutomationId="DatePickerControl"
+                     <DatePicker x:Name="DatePickerControl"
+                                 AutomationId="DatePickerControl"
                                  Background="{Binding Background}"
                                  CharacterSpacing="{Binding CharacterSpacing}"
                                  Closed="OnClosed"
@@ -27,7 +28,7 @@
                                  FontFamily="{Binding FontFamily}"
                                  FontSize="{Binding FontSize}"
                                  IsEnabled="{Binding IsEnabled}"
-                                 IsOpen="{Binding IsOpen}"
+                                 IsOpen="{Binding IsOpen, Mode=TwoWay}"
                                  IsVisible="{Binding IsVisible}"
                                  MinimumDate="{Binding MinimumDate}"
                                  MaximumDate="{Binding MaximumDate}"
@@ -35,6 +36,22 @@
                                  Shadow="{Binding Shadow}"
                                  TextColor="{Binding TextColor}"/>
               </VerticalStackLayout>
+
+              <HorizontalStackLayout HorizontalOptions="Center"
+                                     Spacing="8">
+                     <Button AutomationId="OpenDatePickerButton"
+                             Clicked="OpenDatePickerButton_Clicked"
+                             Text="Open"/>
+                     <Button AutomationId="CloseDatePickerButton"
+                             Clicked="CloseDatePickerButton_Clicked"
+                             Text="Close"/>
+                     <Button AutomationId="FocusDatePickerButton"
+                             Clicked="FocusDatePickerButton_Clicked"
+                             Text="Focus"/>
+                     <Button AutomationId="UnfocusDatePickerButton"
+                             Clicked="UnfocusDatePickerButton_Clicked"
+                             Text="Unfocus"/>
+              </HorizontalStackLayout>
 
               <Label Text="DateSelected Event"
                      HorizontalOptions="Center"/>
@@ -56,6 +73,17 @@
                      <Label Text="Dropdown State: "/>
                      <Label x:Name="DropdownStateLabel"
                             AutomationId="DropdownStateLabel"/>
+              </HorizontalStackLayout>
+              <HorizontalStackLayout HorizontalOptions="Center"
+                                     Spacing="12">
+                     <Label AutomationId="IsOpenStatusLabel"
+                            Text="{Binding IsOpen, StringFormat='IsOpen: {0}'}"/>
+                     <Label x:Name="OpenedCountLabel"
+                            AutomationId="OpenedCountLabel"
+                            Text="Opened: 0"/>
+                     <Label x:Name="ClosedCountLabel"
+                            AutomationId="ClosedCountLabel"
+                            Text="Closed: 0"/>
               </HorizontalStackLayout>
 
               <Label Text="Culture Format Display"
