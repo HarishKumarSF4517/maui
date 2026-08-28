@@ -21,22 +21,34 @@ namespace Microsoft.Maui.TestCases.Tests.Issues
 		public void CollectionViewWithRefreshViewShouldNotReset()
 		{
 			TapFooter();
-			App.ScrollTo("Footer");
+			ScrollToFooterAndWaitForOffset();
 			TapFooter();
-			App.ScrollTo("Footer");
-			var verticalOffsetBeforeRefresh = GetVerticalOffset();
-			Assert.That(verticalOffsetBeforeRefresh, Is.GreaterThan(0));
+			var verticalOffsetBeforeRefresh = ScrollToFooterAndWaitForOffset();
 
 			TapFooter();
-			App.ScrollTo("Footer");
-			var verticalOffsetAfterRefresh = GetVerticalOffset();
-			Assert.That(verticalOffsetAfterRefresh, Is.GreaterThan(0));
+			var verticalOffsetAfterRefresh = ScrollToFooterAndWaitForOffset();
+			Assert.That(verticalOffsetAfterRefresh, Is.GreaterThan(verticalOffsetBeforeRefresh));
 		}
 
 		void TapFooter()
 		{
 			App.WaitForElement("Footer");
 			App.Tap("Footer");
+		}
+
+		double ScrollToFooterAndWaitForOffset()
+		{
+			var verticalOffsetBeforeScroll = GetVerticalOffset();
+			var verticalOffsetAfterScroll = verticalOffsetBeforeScroll;
+
+			App.RetryAssert(() =>
+			{
+				App.ScrollTo("Footer");
+				verticalOffsetAfterScroll = GetVerticalOffset();
+				Assert.That(verticalOffsetAfterScroll, Is.GreaterThan(verticalOffsetBeforeScroll));
+			});
+
+			return verticalOffsetAfterScroll;
 		}
 
 		double GetVerticalOffset()

@@ -18,10 +18,17 @@ public class Issue33038 : _IssuesUITest
 	{
 		App.WaitForElement("StartPageLabel");
 		App.Tap("GoToSignInButton");
-		App.WaitForElement("SignInLabel");
-		// The layout can take an extra frame to settle after navigation, so retry the screenshot
-		// comparison and allow a small tolerance for cross-machine rendering variance.
-		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+
+		var signInLabelRect = App.WaitForElement("SignInLabel").GetRect();
+		var emailEntryRect = App.WaitForElement("EmailEntry").GetRect();
+
+		Assert.Multiple(() =>
+		{
+			Assert.That(signInLabelRect.Y, Is.GreaterThanOrEqualTo(20),
+				"SignInLabel should render below the top safe area on first navigation");
+			Assert.That(emailEntryRect.Y, Is.GreaterThan(signInLabelRect.Y + signInLabelRect.Height),
+				"EmailEntry should render below SignInLabel on first navigation");
+		});
 	}
 }
 #endif
