@@ -11,7 +11,7 @@
                            AutomationId="Options"/>
        </ContentPage.ToolbarItems>
        <VerticalStackLayout
-              Spacing="20">
+              Spacing="10">
               <VerticalStackLayout x:Name="DatePickerLayout"
                                    Padding="20,100,20,100">
                      <DatePicker x:Name="DatePickerControl"
@@ -38,7 +38,7 @@
               </VerticalStackLayout>
 
               <HorizontalStackLayout HorizontalOptions="Center"
-                                     Spacing="8">
+                                     Spacing="5">
                      <Button AutomationId="OpenDatePickerButton"
                              Clicked="OpenDatePickerButton_Clicked"
                              Text="Open"/>
