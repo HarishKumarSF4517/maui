@@ -225,14 +225,24 @@
                      Grid.Column="0"
                      Text="Shadow:"
                      VerticalOptions="Center"/>
-              <RadioButton Grid.Row="11"
-                           Grid.Column="1"
-                           x:Name="ShadowTrueRadio"
-                           VerticalOptions="Center"
-                           AutomationId="ShadowTrueRadioButton"
-                           GroupName="Shadow"
-                           Content="True"
-                           CheckedChanged="OnShadowRadioButtonCheckedChanged"/>
+              <HorizontalStackLayout Grid.Row="11"
+                                     Grid.Column="1"
+                                     Spacing="1"
+                                     VerticalOptions="Center">
+                     <RadioButton x:Name="ShadowTrueRadio"
+                                  AutomationId="ShadowTrueRadioButton"
+                                  GroupName="Shadow"
+                                  Content="True"
+                                  CheckedChanged="OnShadowRadioButtonCheckedChanged"/>
+                     <Label Text="IsOpen:"
+                            Padding="10,0,0,0"
+                            FontAttributes="Bold"
+                            VerticalOptions="Center"/>
+                     <RadioButton GroupName="IsOpen"
+                                  AutomationId="IsOpenTrueRadioButton"
+                                  Content="True"
+                                  CheckedChanged="OnIsOpenRadioButtonCheckedChanged"/>
+              </HorizontalStackLayout>
 
               <!-- Text Color -->
               <Label Grid.Row="12"
@@ -291,14 +301,6 @@
                                   AutomationId="FontAutoScalingEnabledFalseRadioButton"
                                   Content="False"
                                   CheckedChanged="OnFontAutoScalingEnabledRadioButtonCheckedChanged"/>
-                     <Label Text="IsOpen:"
-                            Padding="40,0,0,0"
-                            FontAttributes="Bold"
-                            VerticalOptions="Center"/>
-                     <RadioButton GroupName="IsOpen"
-                                  AutomationId="IsOpenTrueRadioButton"
-                                  Content="True"
-                                  CheckedChanged="OnIsOpenRadioButtonCheckedChanged"/>
               </HorizontalStackLayout>
 
               <!-- Background -->
