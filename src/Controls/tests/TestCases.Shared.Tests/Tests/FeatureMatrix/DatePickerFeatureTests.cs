@@ -81,7 +81,7 @@ public class DatePickerFeatureTests : _GalleryUITest
 	}
 
 
-#if TEST_FAILS_ON_CATALYST && TEST_FAILS_ON_WINDOWS && TEST_FAILS_ON_IOS // Issue Links - https://github.com/dotnet/maui/issues/30066, https://github.com/dotnet/maui/issues/31167
+#if TEST_FAILS_ON_CATALYST && TEST_FAILS_ON_WINDOWS  // Issue Links - https://github.com/dotnet/maui/issues/30066
 	[Test, Order(4)]
 	public void DatePicker_SetCharacterSpacingAndDate_VerifyVisualState()
 	{
@@ -112,30 +112,7 @@ public class DatePickerFeatureTests : _GalleryUITest
 		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
-#if TEST_FAILS_ON_IOS && TEST_FAILS_ON_CATALYST && TEST_FAILS_ON_WINDOWS // Issue Links - https://github.com/dotnet/maui/issues/23793, https://github.com/dotnet/maui/issues/29099, https://github.com/dotnet/maui/issues/30011
-	[Test, Order(6)]
-	public void DatePicker_SetDateAndFormat_VerifyVisualState()
-	{
-		App.WaitForElement("Options");
-		App.Tap("Options");
-		App.WaitForElement("FormatEntry");
-		App.ClearText("FormatEntry");
-		App.EnterText("FormatEntry", "D");
-		App.WaitForElement("SetFormatButton");
-		App.Tap("SetFormatButton");
-		App.WaitForElement("Apply");
-		App.Tap("Apply");
-		App.WaitForElementTillPageNavigationSettled("DatePickerControl");
-#if ANDROID
-		var datePicker = App.WaitForElement("DatePickerControl").GetText();
-		Assert.That(datePicker, Is.EqualTo("Wednesday, December 24, 2025"));
-#else
-        VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
-#endif
-	}
-#endif
-
-#if TEST_FAILS_ON_CATALYST && TEST_FAILS_ON_IOS // Issue Links - https://github.com/dotnet/maui/issues/20904, https://github.com/dotnet/maui/issues/30065, https://github.com/dotnet/maui/issues/31167
+#if TEST_FAILS_ON_CATALYST // Issue Links - https://github.com/dotnet/maui/issues/20904, https://github.com/dotnet/maui/issues/30065
 	[Test, Order(7)]
 	public void DatePicker_SetDateAndTextColor_VerifyVisualState()
 	{
@@ -176,7 +153,7 @@ public class DatePickerFeatureTests : _GalleryUITest
 		App.WaitForElementTillPageNavigationSettled("DatePickerControl");
 		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 	}
- 
+
 	[Test, Order(10)]
 	public void DatePicker_SetFontAttributesAndFontSize_VerifyVisualState()
 	{
@@ -192,7 +169,7 @@ public class DatePickerFeatureTests : _GalleryUITest
 		App.WaitForElementTillPageNavigationSettled("DatePickerControl");
 		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 	}
-	
+
 	[Test, Order(12)]
 	public void DatePicker_SetFontFamilyAndFontSize_VerifyVisualState()
 	{
@@ -211,6 +188,27 @@ public class DatePickerFeatureTests : _GalleryUITest
 #endif
 
 #if TEST_FAILS_ON_IOS && TEST_FAILS_ON_CATALYST && TEST_FAILS_ON_WINDOWS // Issue Links - https://github.com/dotnet/maui/issues/23793, https://github.com/dotnet/maui/issues/29099, https://github.com/dotnet/maui/issues/30011
+	[Test, Order(6)]
+	public void DatePicker_SetDateAndFormat_VerifyVisualState()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("FormatEntry");
+		App.ClearText("FormatEntry");
+		App.EnterText("FormatEntry", "D");
+		App.WaitForElement("SetFormatButton");
+		App.Tap("SetFormatButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElementTillPageNavigationSettled("DatePickerControl");
+#if ANDROID
+		var datePicker = App.WaitForElement("DatePickerControl").GetText();
+		Assert.That(datePicker, Is.EqualTo("Wednesday, December 24, 2025"));
+#else
+        VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+#endif
+	}
+
 	[Test, Order(11)]
 	public void DatePicker_SetFontAttributesAndFormat_VerifyVisualState()
 	{
@@ -269,7 +267,6 @@ public class DatePickerFeatureTests : _GalleryUITest
 	}
 #endif
 
-#if TEST_FAILS_ON_IOS //Issue Link: https://github.com/dotnet/maui/issues/31167
 	[Test, Order(15)]
 	public void DatePicker_SetDateAndIsEnabled_VerifyVisualState()
 	{
@@ -284,7 +281,6 @@ public class DatePickerFeatureTests : _GalleryUITest
 		App.Tap("DatePickerControl");
 		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 	}
-#endif
 
 	[Test, Order(16)]
 	public void DatePicker_SetDateAndIsVisible_VerifyVisualState()
@@ -299,7 +295,7 @@ public class DatePickerFeatureTests : _GalleryUITest
 		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
-#if TEST_FAILS_ON_WINDOWS && TEST_FAILS_ON_IOS// Issue Links - https://github.com/dotnet/maui/issues/29812, https://github.com/dotnet/maui/issues/31167
+#if TEST_FAILS_ON_WINDOWS // Issue Links - https://github.com/dotnet/maui/issues/29812
 	[Test, Order(17)]
 	public void DatePicker_SetDateAndShadowOpacity_VerifyVisualState()
 	{
@@ -588,6 +584,9 @@ public class DatePickerFeatureTests : _GalleryUITest
 #if IOS
 		App.WaitForElement("Done");
 		App.Tap("Done");
+#elif MACCATALYST
+		App.WaitForElement("CloseDatePickerButton");
+		App.Tap("CloseDatePickerButton");
 #elif WINDOWS
         App.Tap("25");
 #endif
