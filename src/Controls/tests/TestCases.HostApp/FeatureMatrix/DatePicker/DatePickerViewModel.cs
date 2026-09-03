@@ -22,7 +22,7 @@ public class DatePickerViewModel : INotifyPropertyChanged
 	private DateTime _maxDate = DateTime.ParseExact("12/24/2027", "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
 	private Shadow _shadow;
 	private Color _textColor = Colors.Black;
-	private Brush _background;
+	private Brush _background = Brush.White;
 	private CultureInfo _culture;
 
 	public double CharacterSpacing
@@ -268,7 +268,7 @@ public class DatePickerViewModel : INotifyPropertyChanged
 		MaximumDate = new DateTime(2027, 12, 24);
 		Shadow = null;
 		TextColor = Colors.Black;
-		Background = null;
+		Background = Brush.White;
 		Culture = new CultureInfo("en-US");
 	}
 
