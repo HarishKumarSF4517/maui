@@ -28,7 +28,7 @@ public class DatePickerFeatureTests : _GalleryUITest
         App.WaitForElement("Done");
         App.Tap("Done");
 #elif WINDOWS
-        App.Tap("25");
+		App.Tap("25");
 #endif
 		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 	}
@@ -48,7 +48,7 @@ public class DatePickerFeatureTests : _GalleryUITest
         App.WaitForElement("Done");
         App.Tap("Done");
 #elif WINDOWS
-        App.Tap("26");
+		App.Tap("26");
 #endif
 		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 	}
@@ -75,7 +75,7 @@ public class DatePickerFeatureTests : _GalleryUITest
         App.WaitForElement("Done");
         App.Tap("Done");
 #elif WINDOWS
-        App.Tap("27");
+		App.Tap("27");
 #endif
 		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 	}
@@ -588,7 +588,11 @@ public class DatePickerFeatureTests : _GalleryUITest
 		App.WaitForElement("CloseDatePickerButton");
 		App.Tap("CloseDatePickerButton");
 #elif WINDOWS
-        App.Tap("25");
+		// Dismiss the calendar flyout by tapping the day cell for the 25th. The
+		// DatePicker Date is always reset to 12/24 (see
+		// DatePickerViewModel.ResetToDefaults) before this test runs, so "25" is a
+		// deterministic, always-visible day cell in the default month view.
+		App.Tap("25");
 #endif
 		Assert.That(App.WaitForElement("DropdownStateLabel").GetText(), Is.EqualTo("Closed"));
 	}
@@ -619,4 +623,104 @@ public class DatePickerFeatureTests : _GalleryUITest
 		App.WaitForElementTillPageNavigationSettled("DatePickerControl");
 		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 	}
+
+	[Test, Order(34)]
+	public void DatePicker_SetMinimumMaximumDateAndDate_VerifyVisualState()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("MinimumDateEntry");
+		App.ClearText("MinimumDateEntry");
+		App.EnterText("MinimumDateEntry", "12/24/2024");
+		App.WaitForElement("SetMinimumDateButton");
+		App.Tap("SetMinimumDateButton");
+		App.WaitForElement("MaximumDateEntry");
+		App.ClearText("MaximumDateEntry");
+		App.EnterText("MaximumDateEntry", "12/24/2028");
+		App.WaitForElement("SetMaximumDateButton");
+		App.Tap("SetMaximumDateButton");
+		App.WaitForElement("DateEntry");
+		App.ClearText("DateEntry");
+		App.EnterText("DateEntry", "06/15/2026");
+		App.WaitForElement("SetDateButton");
+		App.Tap("SetDateButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElementTillPageNavigationSettled("DatePickerControl");
+		App.WaitForElement("CultureFormatLabel");
+		App.Tap("CultureFormatLabel");
+		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+	}
+
+#if TEST_FAILS_ON_IOS && TEST_FAILS_ON_CATALYST && TEST_FAILS_ON_WINDOWS // Issue Links - https://github.com/dotnet/maui/issues/30090
+	[Test, Order(35)]
+	public void DatePicker_SetFormatAndCulture_VerifyDateFormat()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("FormatEntry");
+		App.ClearText("FormatEntry");
+		App.EnterText("FormatEntry", "D");
+		App.WaitForElement("SetFormatButton");
+		App.Tap("SetFormatButton");
+		App.WaitForElement("CultureFrButton");
+		App.Tap("CultureFrButton");
+		App.WaitForElement("DateEntry");
+		App.ClearText("DateEntry");
+		App.EnterText("DateEntry", "12/24/2026");
+		App.WaitForElement("SetDateButton");
+		App.Tap("SetDateButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElementTillPageNavigationSettled("DatePickerControl");
+		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+	}
+
+	// Regression test for https://github.com/dotnet/maui/issues/30090:
+	// verifies that applying a new culture in a later session does not retain a
+	// previously-applied culture's formatting (i.e. the culture change actually
+	// takes effect at runtime rather than being cached/stale).
+	[Test, Order(36)]
+	public void DatePicker_ChangeCultureAcrossMultipleSessions_VerifyDateFormatUpdates()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("CultureJpButton");
+		App.Tap("CultureJpButton");
+		App.WaitForElement("DateEntry");
+		App.ClearText("DateEntry");
+		App.EnterText("DateEntry", "12/24/2026");
+		App.WaitForElement("SetDateButton");
+		App.Tap("SetDateButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElementTillPageNavigationSettled("DatePickerControl");
+#if ANDROID
+		var jaCultureFormatText = App.WaitForElement("CultureFormatLabel").GetText();
+		Assert.That(jaCultureFormatText, Is.EqualTo("Culture: ja-JP, Date: 2026/12/24 0:00:00"));
+#else
+        VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+#endif
+
+		// Re-enter Options (resets to defaults, i.e. en-US) and set a different date
+		// without explicitly touching Culture, to confirm the previously-applied
+		// ja-JP formatting from the prior session does not leak into this one.
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("DateEntry");
+		App.ClearText("DateEntry");
+		App.EnterText("DateEntry", "01/05/2027");
+		App.WaitForElement("SetDateButton");
+		App.Tap("SetDateButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElementTillPageNavigationSettled("DatePickerControl");
+#if ANDROID
+		var defaultCultureFormatText = App.WaitForElement("CultureFormatLabel").GetText();
+		Assert.That(defaultCultureFormatText, Is.EqualTo("Culture: en-US, Date: 1/5/2027 12:00:00 AM"));
+#else
+        VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
+#endif
+	}
+#endif
 }
