@@ -11,31 +11,77 @@ public class RefreshViewViewModel : INotifyPropertyChanged
 	private bool _continue = false;
 	private FlowDirection _flowDirection = FlowDirection.LeftToRight;
 	private bool _isEnabled = true;
+	private bool _isRefreshEnabled = true;
 	private bool _isVisible = true;
 	private bool _isRefreshing = false;
 	private Color _refreshColor = Colors.Black;
 	private Color _boxViewColor = Colors.Orange;
 	private Shadow _shadow = null;
 	private string _refreshStatusText = "None";
+	private bool _canExecuteCommand = true;
 
 	public event PropertyChangedEventHandler PropertyChanged;
 
+	// Keeps a reference to the original Command so it can be restored after testing the
+	// "Command == null" scenario, since setting Command back to a brand new instance would
+	// also reset any CanExecute state already configured on it.
+	public ICommand DefaultCommand { get; }
+
 	public RefreshViewViewModel()
 	{
-		Command = new Command(async (parameter) =>
+		DefaultCommand = new Command(async (parameter) =>
 		{
-			RefreshStatusText = $"Refresh Started";
-			if (parameter.ToString() == "Red" || parameter.ToString() == "Green")
+			var parameterText = parameter?.ToString() ?? "null";
+			RefreshStatusText = $"Refresh Started: {parameterText}";
+			if (parameterText == "Red" || parameterText == "Green")
 			{
-				BoxViewColor = parameter.ToString() == "Red" ? Colors.Red : Colors.Green;
+				BoxViewColor = parameterText == "Red" ? Colors.Red : Colors.Green;
 			}
 			if (!Continue)
 			{
 				await Task.Delay(2000);
 				IsRefreshing = false;
-				RefreshStatusText = $"Refresh completed";
+				RefreshStatusText = $"Refresh completed: {parameterText}";
 			}
-		});
+		}, (parameter) => CanExecuteCommand);
+
+		Command = DefaultCommand;
+	}
+
+	public void ResetToDefaults()
+	{
+		Continue = false;
+		IsRefreshing = false;
+		IsEnabled = true;
+		IsVisible = true;
+		FlowDirection = FlowDirection.LeftToRight;
+		RefreshColor = Colors.Black;
+		BoxViewColor = Colors.Orange;
+		Shadow = null;
+		CommandParameter = "Orange";
+		Command = DefaultCommand;
+		CanExecuteCommand = true;
+		IsRefreshEnabled = true;
+		RefreshStatusText = "None";
+		RefreshEventStatusText = "Not Raised";
+	}
+
+	// Controls whether DefaultCommand.CanExecute reports true or false, so tests can verify
+	// that RefreshView becomes non-interactive when its bound Command cannot execute.
+	public bool CanExecuteCommand
+	{
+		get => _canExecuteCommand;
+		set
+		{
+			if (_canExecuteCommand != value)
+			{
+				_canExecuteCommand = value;
+				OnPropertyChanged();
+
+				if (DefaultCommand is Command cmd)
+					cmd.ChangeCanExecute();
+			}
+		}
 	}
 
 	public ICommand Command
@@ -101,6 +147,19 @@ public class RefreshViewViewModel : INotifyPropertyChanged
 			if (_isEnabled != value)
 			{
 				_isEnabled = value;
+				OnPropertyChanged();
+			}
+		}
+	}
+
+	public bool IsRefreshEnabled
+	{
+		get => _isRefreshEnabled;
+		set
+		{
+			if (_isRefreshEnabled != value)
+			{
+				_isRefreshEnabled = value;
 				OnPropertyChanged();
 			}
 		}
