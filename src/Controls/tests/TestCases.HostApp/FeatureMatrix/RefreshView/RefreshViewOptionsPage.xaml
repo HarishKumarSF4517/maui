@@ -12,9 +12,9 @@
                            AutomationId="Apply"/>
        </ContentPage.ToolbarItems>
 
-       <Grid RowSpacing="15"
-             ColumnSpacing="70"
-             RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+       <Grid RowSpacing="5"
+             ColumnSpacing="15"
+             RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
              ColumnDefinitions="Auto,Auto"
              HorizontalOptions="Center"
              VerticalOptions="Center">
@@ -27,9 +27,9 @@
                      VerticalOptions="Center"/>
               <HorizontalStackLayout Grid.Row="0"
                                      Grid.Column="1"
-                                     Spacing="5">
+                                     Spacing="2">
                      <Button AutomationId="CommandRedButton"
-                             BackgroundColor="Red"
+                             BackgroundColor="#B00020"
                              Clicked="OnButtonClicked"
                              TextColor="White"
                              Text="Red"/>
@@ -38,6 +38,9 @@
                              BackgroundColor="Green"
                              TextColor="White"
                              Text="Green"/>
+                     <Button AutomationId="CommandParameterNullButton"
+                             Clicked="OnButtonClicked"
+                             Text="Null"/>
               </HorizontalStackLayout>
 
               <!-- IsEnabled -->
@@ -91,13 +94,27 @@
                                   FontSize="15"/>
               </HorizontalStackLayout>
 
-              <!-- IsRefreshing -->
+              <!-- IsRefreshEnabled -->
               <Label Grid.Row="4"
+                     Grid.Column="0"
+                     Text="IsRefreshEnabled:"
+                     FontSize="15"
+                     VerticalOptions="Center"/>
+              <RadioButton Grid.Row="4"
+                           Grid.Column="1"
+                           GroupName="IsRefreshEnabled"
+                           AutomationId="IsRefreshEnabledFalseButton"
+                           Content="False"
+                           CheckedChanged="OnIsRefreshEnabledRadioButtonCheckedChanged"
+                           FontSize="15"/>
+
+              <!-- IsRefreshing -->
+              <Label Grid.Row="5"
                      Grid.Column="0"
                      Text="IsRefreshing:"
                      FontSize="15"
                      VerticalOptions="Center"/>
-              <RadioButton Grid.Row="4"
+              <RadioButton Grid.Row="5"
                            Grid.Column="1"
                            Content="True"
                            CheckedChanged="OnIsRefreshingRadioButtonCheckedChanged"
@@ -105,12 +122,12 @@
                            AutomationId="IsRefreshingTrueRadioButton"/>
 
               <!-- RefreshColor -->
-              <Label Grid.Row="5"
+              <Label Grid.Row="6"
                      Grid.Column="0"
                      Text="RefreshColor:"
                      FontSize="15"
                      VerticalOptions="Center"/>
-              <StackLayout Grid.Row="5"
+              <StackLayout Grid.Row="6"
                            Grid.Column="1"
                            Spacing="5">
                      <RadioButton Content="Red"
@@ -132,17 +149,59 @@
               </StackLayout>
 
               <!-- Shadow -->
-              <Label Grid.Row="6"
+              <Label Grid.Row="7"
                      Grid.Column="0"
                      Text="Shadow:"
                      FontSize="15"
                      VerticalOptions="Center"/>
-              <RadioButton Grid.Row="6"
+              <RadioButton Grid.Row="7"
                            Grid.Column="1"
                            GroupName="Shadow"
                            AutomationId="ShadowTrueButton"
                            Content="True"
                            CheckedChanged="OnShadowRadioButtonCheckedChanged"
                            FontSize="15"/>
+
+              <!-- Command -->
+              <Label Grid.Row="8"
+                     Grid.Column="0"
+                     Text="Command:"
+                     FontSize="15"
+                     VerticalOptions="Center"/>
+              <HorizontalStackLayout Grid.Row="8"
+                                     Grid.Column="1">
+                     <RadioButton AutomationId="CommandDefaultButton"
+                                  GroupName="Command"
+                                  IsChecked="True"
+                                  Content="Default"
+                                  CheckedChanged="OnCommandRadioButtonCheckedChanged"
+                                  FontSize="15"/>
+                     <RadioButton AutomationId="CommandNullButton"
+                                  GroupName="Command"
+                                  Content="Null"
+                                  CheckedChanged="OnCommandRadioButtonCheckedChanged"
+                                  FontSize="15"/>
+              </HorizontalStackLayout>
+
+              <!-- Command CanExecute -->
+              <Label Grid.Row="9"
+                     Grid.Column="0"
+                     Text="Command CanExecute:"
+                     FontSize="15"
+                     VerticalOptions="Center"/>
+              <HorizontalStackLayout Grid.Row="9"
+                                     Grid.Column="1">
+                     <RadioButton AutomationId="CanExecuteTrueButton"
+                                  GroupName="CanExecute"
+                                  IsChecked="True"
+                                  Content="True"
+                                  CheckedChanged="OnCanExecuteRadioButtonCheckedChanged"
+                                  FontSize="15"/>
+                     <RadioButton AutomationId="CanExecuteFalseButton"
+                                  GroupName="CanExecute"
+                                  Content="False"
+                                  CheckedChanged="OnCanExecuteRadioButtonCheckedChanged"
+                                  FontSize="15"/>
+              </HorizontalStackLayout>
        </Grid>
 </ContentPage>
