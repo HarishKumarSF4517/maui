@@ -29,8 +29,8 @@ public partial class RefreshViewControlMainPage : ContentPage
 
 	private async void NavigateToOptionsPage_Clicked(object sender, EventArgs e)
 	{
+		_viewModel.ResetToDefaults();
 		SetScrollViewContent();
-		BindingContext = _viewModel = new RefreshViewViewModel();
 		await Navigation.PushAsync(new RefreshViewOptionsPage(_viewModel));
 	}
 
@@ -43,7 +43,7 @@ public partial class RefreshViewControlMainPage : ContentPage
 		{
 			HeightRequest = 100,
 			WidthRequest = 200,
-			HorizontalOptions = LayoutOptions.Center,
+			HorizontalOptions = LayoutOptions.Start,
 			AutomationId = "BoxContent"
 		};
 
@@ -65,10 +65,12 @@ public partial class RefreshViewControlMainPage : ContentPage
 		refreshView.SetBinding(RefreshView.CommandParameterProperty, "CommandParameter");
 		refreshView.SetBinding(RefreshView.FlowDirectionProperty, "FlowDirection");
 		refreshView.SetBinding(RefreshView.IsEnabledProperty, "IsEnabled");
+		refreshView.SetBinding(RefreshView.IsRefreshEnabledProperty, "IsRefreshEnabled");
 		refreshView.SetBinding(RefreshView.IsVisibleProperty, "IsVisible");
 		refreshView.SetBinding(RefreshView.IsRefreshingProperty, "IsRefreshing");
 		refreshView.SetBinding(RefreshView.RefreshColorProperty, "RefreshColor");
 		refreshView.SetBinding(RefreshView.ShadowProperty, "Shadow");
+		IsRefreshEnabledValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.IsRefreshEnabled), source: refreshView));
 
 		RefreshViewContainer.Children.Add(refreshView);
 	}
@@ -108,10 +110,12 @@ public partial class RefreshViewControlMainPage : ContentPage
 		refreshView.SetBinding(RefreshView.CommandParameterProperty, "CommandParameter");
 		refreshView.SetBinding(RefreshView.FlowDirectionProperty, "FlowDirection");
 		refreshView.SetBinding(RefreshView.IsEnabledProperty, "IsEnabled");
+		refreshView.SetBinding(RefreshView.IsRefreshEnabledProperty, "IsRefreshEnabled");
 		refreshView.SetBinding(RefreshView.IsVisibleProperty, "IsVisible");
 		refreshView.SetBinding(RefreshView.IsRefreshingProperty, "IsRefreshing");
 		refreshView.SetBinding(RefreshView.RefreshColorProperty, "RefreshColor");
 		refreshView.SetBinding(RefreshView.ShadowProperty, "Shadow");
+		IsRefreshEnabledValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.IsRefreshEnabled), source: refreshView));
 
 		RefreshViewContainer.Children.Add(refreshView);
 	}
@@ -127,10 +131,10 @@ public partial class RefreshViewControlMainPage : ContentPage
 	}
 
 	private void OnRefreshViewRefreshing(object sender, EventArgs e)
-{
-    if (BindingContext is RefreshViewViewModel vm)
-    {
-        vm.RefreshEventStatusText = "Raised";
-    }
-}
+	{
+		if (BindingContext is RefreshViewViewModel vm)
+		{
+			vm.RefreshEventStatusText = "Raised";
+		}
+	}
 }

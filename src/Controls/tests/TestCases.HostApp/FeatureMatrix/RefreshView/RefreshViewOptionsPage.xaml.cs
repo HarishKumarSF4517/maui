@@ -20,7 +20,7 @@ public partial class RefreshViewOptionsPage : ContentPage
 	{
 		if (sender is Button button)
 		{
-			_viewModel.CommandParameter = button.Text;
+			_viewModel.CommandParameter = button.Text == "Null" ? null : button.Text;
 		}
 	}
 
@@ -38,6 +38,14 @@ public partial class RefreshViewOptionsPage : ContentPage
 		if (radioButton.IsChecked)
 		{
 			_viewModel.IsEnabled = false;
+		}
+	}
+
+	private void OnIsRefreshEnabledRadioButtonCheckedChanged(object sender, CheckedChangedEventArgs e)
+	{
+		if (sender is RadioButton { IsChecked: true })
+		{
+			_viewModel.IsRefreshEnabled = false;
 		}
 	}
 
@@ -91,6 +99,24 @@ public partial class RefreshViewOptionsPage : ContentPage
 					_viewModel.RefreshColor = null;
 					break;
 			}
+		}
+	}
+
+	private void OnCommandRadioButtonCheckedChanged(object sender, CheckedChangedEventArgs e)
+	{
+		var radioButton = sender as RadioButton;
+		if (radioButton.IsChecked)
+		{
+			_viewModel.Command = radioButton.Content.ToString() == "Null" ? null : _viewModel.DefaultCommand;
+		}
+	}
+
+	private void OnCanExecuteRadioButtonCheckedChanged(object sender, CheckedChangedEventArgs e)
+	{
+		var radioButton = sender as RadioButton;
+		if (radioButton.IsChecked)
+		{
+			_viewModel.CanExecuteCommand = radioButton.Content.ToString() == "True";
 		}
 	}
 }

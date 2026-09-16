@@ -21,6 +21,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.WaitForElement("Options");
 		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("False"));
 		Assert.That(App.FindElement("IsEnabledValueLabel").GetText(), Is.EqualTo("True"));
+		Assert.That(App.FindElement("IsRefreshEnabledValueLabel").GetText(), Is.EqualTo("True"));
 		Assert.That(App.FindElement("IsVisibleValueLabel").GetText(), Is.EqualTo("True"));
 		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Is.EqualTo("None"));
 	}
@@ -93,14 +94,13 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.Tap("Options");
 		App.WaitForElement("RefreshColorBlueRadio");
 		App.Tap("RefreshColorBlueRadio");
+		App.WaitForElement("IsRefreshingTrueRadioButton");
+		App.Tap("IsRefreshingTrueRadioButton");
 		App.WaitForElement("Apply");
 		App.Tap("Apply");
 		App.WaitForElement("RefreshView");
-		App.WaitForElement("CollectionViewContentButton");
-		App.Tap("CollectionViewContentButton");
-		App.WaitForElement("RefreshView");
-		App.ScrollUp("RefreshView");
-		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Is.Not.EqualTo("None"));
+		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("True"));
+		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test, Order(7)]
@@ -231,7 +231,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Not Raised"));
 	}
 
-	[Test , Order(15)]
+	[Test, Order(15)]
 	[Category(UITestCategories.RefreshView)]
 	public void RefreshView_RefreshingEvent_IsRaised()
 	{
@@ -239,39 +239,39 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.Tap("Options");
 		App.WaitForElement("Apply");
 		App.Tap("Apply");
-    	App.WaitForElement("RefreshView");
+		App.WaitForElement("RefreshView");
 
-    	Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Not Raised"));
+		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Not Raised"));
 
-    	App.ScrollUp("RefreshView");
+		App.ScrollUp("RefreshView");
 
-    	App.WaitForElement("RefreshingEventLabel", timeout: TimeSpan.FromSeconds(5));
+		App.WaitForElement("RefreshingEventLabel", timeout: TimeSpan.FromSeconds(5));
 
-    	Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Raised"));
+		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Raised"));
 	}
 
-	[Test , Order(16)]
+	[Test, Order(16)]
 	[Category(UITestCategories.RefreshView)]
 
 	public void RefreshView_Disabled_DoesNotRaiseRefreshingEvent()
 	{
-    	App.WaitForElement("Options");
-    	App.Tap("Options");
+		App.WaitForElement("Options");
+		App.Tap("Options");
 
-    	App.WaitForElement("IsEnabledFalseButton");
-    	App.Tap("IsEnabledFalseButton");
+		App.WaitForElement("IsEnabledFalseButton");
+		App.Tap("IsEnabledFalseButton");
 
 		App.WaitForElement("Apply");
-    	App.Tap("Apply");
+		App.Tap("Apply");
 
-    	App.WaitForElement("RefreshView");
+		App.WaitForElement("RefreshView");
 
-    	App.ScrollUp("RefreshView");
+		App.ScrollUp("RefreshView");
 
-    	Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Not Raised"));
+		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Not Raised"));
 	}
 
-	[Test , Order(17)]
+	[Test, Order(17)]
 	[Category(UITestCategories.RefreshView)]
 	public void RefreshView_CollectionViewInteraction_ThenPull_RaisesRefreshingEvent()
 	{
@@ -280,22 +280,119 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.WaitForElement("Apply");
 		App.Tap("Apply");
 
-    	App.WaitForElement("RefreshView");
-    	App.WaitForElement("CollectionViewContentButton");
+		App.WaitForElement("RefreshView");
+		App.WaitForElement("CollectionViewContentButton");
 
-    	Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Not Raised"));
+		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Not Raised"));
 
-    	App.Tap("CollectionViewContentButton");
+		App.Tap("CollectionViewContentButton");
 
-		Assert.That( App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Not Raised"));
+		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Not Raised"));
 
-    	App.ScrollUp("RefreshView");
+		App.ScrollUp("RefreshView");
 
-    	App.WaitForElement("RefreshingEventLabel");
+		App.WaitForElement("RefreshingEventLabel");
 
-    	Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Raised"));
+		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Raised"));
+	}
+
+	[Test, Order(18)]
+	[Category(UITestCategories.RefreshView)]
+	public void RefreshView_CommandNull_PullToRefresh_RaisesEventButDoesNotExecuteCommand()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("CommandNullButton");
+		App.Tap("CommandNullButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElement("RefreshView");
+
+		App.ScrollUp("RefreshView");
+
+		// The Refreshing event always fires on pull-to-refresh, even when Command is null.
+		App.WaitForElement("RefreshingEventLabel", timeout: TimeSpan.FromSeconds(5));
+		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Raised"));
+
+		// RefreshStatusLabel is only updated by the Command, so it stays "None" when Command is null.
+		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Is.EqualTo("None"));
+	}
+
+	[Test, Order(19)]
+	[Category(UITestCategories.RefreshView)]
+	public void RefreshView_CommandCanExecuteFalse_PullToRefresh_IsIgnored()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("CanExecuteFalseButton");
+		App.Tap("CanExecuteFalseButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElement("RefreshView");
+
+		App.ScrollUp("RefreshView");
+
+		// When CanExecute reports false, IsRefreshEnabled is coerced to false and the pull
+		// gesture should be ignored entirely.
+		Assert.That(App.FindElement("IsRefreshEnabledValueLabel").GetText(), Is.EqualTo("False"));
+		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Not Raised"));
+		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Is.EqualTo("None"));
 	}
 
 #endif
 
+	[Test, Order(20)]
+	[Category(UITestCategories.RefreshView)]
+	public void RefreshView_Disabled_SetIsRefreshingTrue_IsCoercedToFalse()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("IsEnabledFalseButton");
+		App.Tap("IsEnabledFalseButton");
+		App.WaitForElement("IsRefreshingTrueRadioButton");
+		App.Tap("IsRefreshingTrueRadioButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElement("RefreshView");
+
+		// IsRefreshing is coerced back to false because IsEnabled is false.
+		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("False"));
+	}
+
+	[Test, Order(21)]
+	[Category(UITestCategories.RefreshView)]
+	public void RefreshView_IsRefreshEnabledFalse_SetIsRefreshingTrue_IsCoercedToFalse()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("IsRefreshEnabledFalseButton");
+		App.Tap("IsRefreshEnabledFalseButton");
+		App.WaitForElement("IsRefreshingTrueRadioButton");
+		App.Tap("IsRefreshingTrueRadioButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElement("RefreshView");
+
+		Assert.That(App.FindElement("IsRefreshEnabledValueLabel").GetText(), Is.EqualTo("False"));
+		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("False"));
+		Assert.That(App.FindElement("IsEnabledValueLabel").GetText(), Is.EqualTo("True"));
+	}
+
+	[Test, Order(22)]
+	[Category(UITestCategories.RefreshView)]
+	public void RefreshView_NullCommandParameter_ExecutesCommandWithoutException()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("CommandParameterNullButton");
+		App.Tap("CommandParameterNullButton");
+		App.WaitForElement("IsRefreshingTrueRadioButton");
+		App.Tap("IsRefreshingTrueRadioButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElement("RefreshView");
+
+		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Does.Contain("null"));
+		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("True"));
+	}
 }
