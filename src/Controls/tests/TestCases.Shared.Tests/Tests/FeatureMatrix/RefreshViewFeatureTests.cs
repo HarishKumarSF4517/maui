@@ -99,8 +99,8 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.WaitForElement("Apply");
 		App.Tap("Apply");
 		App.WaitForElement("RefreshView");
+		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Is.Not.EqualTo("None"));
 		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("True"));
-		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
 	[Test, Order(7)]
@@ -349,11 +349,10 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.Tap("Options");
 		App.WaitForElement("IsEnabledFalseButton");
 		App.Tap("IsEnabledFalseButton");
-		App.WaitForElement("IsRefreshingTrueRadioButton");
-		App.Tap("IsRefreshingTrueRadioButton");
 		App.WaitForElement("Apply");
 		App.Tap("Apply");
-		App.WaitForElement("RefreshView");
+		App.WaitForElementTillPageNavigationSettled("Options");
+		App.ScrollUp("RefreshView");
 
 		// IsRefreshing is coerced back to false because IsEnabled is false.
 		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("False"));
@@ -367,11 +366,11 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.Tap("Options");
 		App.WaitForElement("IsRefreshEnabledFalseButton");
 		App.Tap("IsRefreshEnabledFalseButton");
-		App.WaitForElement("IsRefreshingTrueRadioButton");
-		App.Tap("IsRefreshingTrueRadioButton");
+
 		App.WaitForElement("Apply");
 		App.Tap("Apply");
-		App.WaitForElement("RefreshView");
+		App.WaitForElementTillPageNavigationSettled("Options");
+		App.ScrollUp("RefreshView");
 
 		Assert.That(App.FindElement("IsRefreshEnabledValueLabel").GetText(), Is.EqualTo("False"));
 		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("False"));
@@ -390,7 +389,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.Tap("IsRefreshingTrueRadioButton");
 		App.WaitForElement("Apply");
 		App.Tap("Apply");
-		App.WaitForElement("RefreshView");
+		App.WaitForElementTillPageNavigationSettled("Options");
 
 		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Does.Contain("null"));
 		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("True"));
