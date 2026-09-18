@@ -61,6 +61,7 @@
                      FontSize="16"/>
               <Label Grid.Row="2"
                      Grid.Column="1"
+                     x:Name="IsRefreshingValueLabel"
                      HorizontalOptions="Center"
                      Text="{Binding IsRefreshing}"
                      FontSize="16"
