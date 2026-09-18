@@ -349,6 +349,8 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.Tap("Options");
 		App.WaitForElement("IsEnabledFalseButton");
 		App.Tap("IsEnabledFalseButton");
+		App.WaitForElement("IsRefreshingTrueRadioButton");
+		App.Tap("IsRefreshingTrueRadioButton");
 		App.WaitForElement("Apply");
 		App.Tap("Apply");
 		App.WaitForElementTillPageNavigationSettled("Options");
@@ -366,6 +368,8 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.Tap("Options");
 		App.WaitForElement("IsRefreshEnabledFalseButton");
 		App.Tap("IsRefreshEnabledFalseButton");
+		App.WaitForElement("IsRefreshingTrueRadioButton");
+		App.Tap("IsRefreshingTrueRadioButton");
 
 		App.WaitForElement("Apply");
 		App.Tap("Apply");
