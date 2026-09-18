@@ -70,8 +70,8 @@ public partial class RefreshViewControlMainPage : ContentPage
 		refreshView.SetBinding(RefreshView.IsRefreshingProperty, "IsRefreshing");
 		refreshView.SetBinding(RefreshView.RefreshColorProperty, "RefreshColor");
 		refreshView.SetBinding(RefreshView.ShadowProperty, "Shadow");
+		IsRefreshingValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.IsRefreshing), source: refreshView));
 		IsRefreshEnabledValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.IsRefreshEnabled), source: refreshView));
-
 		RefreshViewContainer.Children.Add(refreshView);
 	}
 
@@ -115,8 +115,8 @@ public partial class RefreshViewControlMainPage : ContentPage
 		refreshView.SetBinding(RefreshView.IsRefreshingProperty, "IsRefreshing");
 		refreshView.SetBinding(RefreshView.RefreshColorProperty, "RefreshColor");
 		refreshView.SetBinding(RefreshView.ShadowProperty, "Shadow");
+		IsRefreshingValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.IsRefreshing), source: refreshView));
 		IsRefreshEnabledValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.IsRefreshEnabled), source: refreshView));
-
 		RefreshViewContainer.Children.Add(refreshView);
 	}
 
