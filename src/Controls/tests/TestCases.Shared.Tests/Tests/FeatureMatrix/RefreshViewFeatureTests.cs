@@ -4,6 +4,7 @@ using UITest.Core;
 
 namespace Microsoft.Maui.TestCases.Tests;
 
+[Category(UITestCategories.RefreshView)]
 public class RefreshViewFeatureTests : _GalleryUITest
 {
 	public const string RefreshViewFeatureMatrix = "RefreshView Feature Matrix";
@@ -15,7 +16,6 @@ public class RefreshViewFeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(1)]
-	[Category(UITestCategories.RefreshView)]
 	public void RefreshView_ValidateDefaultValues_VerifyLabels()
 	{
 		App.WaitForElement("Options");
@@ -29,7 +29,6 @@ public class RefreshViewFeatureTests : _GalleryUITest
 #if TEST_FAILS_ON_CATALYST && TEST_FAILS_ON_WINDOWS // In Appium PullToRefresh is not supported on Catalyst and Windows
 
 	[Test, Order(2)]
-	[Category(UITestCategories.RefreshView)]
 	public void RefreshView_InsideScrollView_VerifyScrollAndRefresh()
 	{
 		App.WaitForElement("RefreshView");
@@ -41,7 +40,6 @@ public class RefreshViewFeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(3)]
-	[Category(UITestCategories.RefreshView)]
 	public void RefreshView_InsideCollectionView_VerifyRefresh()
 	{
 		App.WaitForElement("Options");
@@ -57,7 +55,6 @@ public class RefreshViewFeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(4)]
-	[Category(UITestCategories.RefreshView)]
 	public void RefreshView_SetCommandParameterTrue_VerifyCommandParameter()
 	{
 		App.WaitForElement("Options");
@@ -68,11 +65,29 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.Tap("Apply");
 		App.WaitForElement("RefreshView");
 		App.ScrollUp("RefreshView");
-		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Is.Not.EqualTo("None"));
+
+		// Confirms the "Red" parameter actually reached the Command, not just that a refresh happened.
+		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Does.Contain("Red"));
 	}
 
 	[Test, Order(5)]
-	[Category(UITestCategories.RefreshView)]
+	public void RefreshView_SetCommandParameterGreen_VerifyCommandParameter()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("CommandGreenButton");
+		App.Tap("CommandGreenButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElement("RefreshView");
+		App.ScrollUp("RefreshView");
+
+		// Green is the other CommandParameter value that also drives BoxViewColor in the
+		// Command callback; verify it is threaded through distinctly from "Red".
+		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Does.Contain("Green"));
+	}
+
+	[Test, Order(6)]
 	public void RefreshView_SetIsEnabled_VerifyEnabledState()
 	{
 		App.WaitForElement("Options");
@@ -86,8 +101,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Is.EqualTo("None"));
 	}
 
-	[Test, Order(6)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(7)]
 	public void RefreshView_SetRefreshColorBlue_VerifyColorChange()
 	{
 		App.WaitForElement("Options");
@@ -103,8 +117,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("True"));
 	}
 
-	[Test, Order(7)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(8)]
 	public void RefreshView_SetFlowDirectionRightToLeft_VerifyFlowDirection()
 	{
 		App.WaitForElement("Options");
@@ -119,8 +132,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 	}
 #endif
 
-	[Test, Order(8)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(9)]
 	public void RefreshView_SetIsVisible_VerifyVisibilityState()
 	{
 		App.WaitForElement("Options");
@@ -134,8 +146,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 
 #if TEST_FAILS_ON_WINDOWS // Issue Link - https://github.com/dotnet/maui/issues/30535
 
-	[Test, Order(9)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(10)]
 	public void RefreshView_SetIsRefreshingAndScrollView_VerifyStatusChanges()
 	{
 		App.WaitForElement("Options");
@@ -150,8 +161,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("True"));
 	}
 
-	[Test, Order(10)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(11)]
 	public void RefreshView_SetIsRefreshingAndCollectionView_VerifyStatusChanges()
 	{
 		App.WaitForElement("Options");
@@ -166,8 +176,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("True"));
 	}
 
-	[Test, Order(11)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(12)]
 	public void RefreshView_SetRefreshColorRedAndIsRefreshing_VerifyColorChange()
 	{
 		App.WaitForElement("Options");
@@ -185,8 +194,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 
 #if TEST_FAILS_ON_WINDOWS // Issue Link - https://github.com/dotnet/maui/issues/29812
 
-	[Test, Order(12)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(13)]
 	public void RefreshView_SetShadow_VerifyShadowApplied()
 	{
 		App.WaitForElement("Options");
@@ -199,8 +207,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 
-	[Test, Order(13)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(14)]
 	public void RefreshView_SetShadowWithCollectionView_VerifyShadowApplied()
 	{
 		App.WaitForElement("Options");
@@ -218,8 +225,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 
 #if TEST_FAILS_ON_WINDOWS && TEST_FAILS_ON_CATALYST // In Appium PullToRefresh is not supported on Catalyst and Windows
 
-	[Test, Order(14)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(15)]
 	public void RefreshView_RefreshingEvent_DefaultState_NotRaised()
 	{
 		App.WaitForElement("Options");
@@ -231,8 +237,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Not Raised"));
 	}
 
-	[Test, Order(15)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(16)]
 	public void RefreshView_RefreshingEvent_IsRaised()
 	{
 		App.WaitForElement("Options");
@@ -250,9 +255,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Raised"));
 	}
 
-	[Test, Order(16)]
-	[Category(UITestCategories.RefreshView)]
-
+	[Test, Order(17)]
 	public void RefreshView_Disabled_DoesNotRaiseRefreshingEvent()
 	{
 		App.WaitForElement("Options");
@@ -271,8 +274,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Not Raised"));
 	}
 
-	[Test, Order(17)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(18)]
 	public void RefreshView_CollectionViewInteraction_ThenPull_RaisesRefreshingEvent()
 	{
 		App.WaitForElement("Options");
@@ -296,8 +298,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Raised"));
 	}
 
-	[Test, Order(18)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(19)]
 	public void RefreshView_CommandNull_PullToRefresh_RaisesEventButDoesNotExecuteCommand()
 	{
 		App.WaitForElement("Options");
@@ -318,8 +319,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Is.EqualTo("None"));
 	}
 
-	[Test, Order(19)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(20)]
 	public void RefreshView_CommandCanExecuteFalse_PullToRefresh_IsIgnored()
 	{
 		App.WaitForElement("Options");
@@ -341,8 +341,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 
 #endif
 
-	[Test, Order(20)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(21)]
 	public void RefreshView_Disabled_SetIsRefreshingTrue_IsCoercedToFalse()
 	{
 		App.WaitForElement("Options");
@@ -360,8 +359,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("False"));
 	}
 
-	[Test, Order(21)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(22)]
 	public void RefreshView_IsRefreshEnabledFalse_SetIsRefreshingTrue_IsCoercedToFalse()
 	{
 		App.WaitForElement("Options");
@@ -381,8 +379,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		Assert.That(App.FindElement("IsEnabledValueLabel").GetText(), Is.EqualTo("True"));
 	}
 
-	[Test, Order(22)]
-	[Category(UITestCategories.RefreshView)]
+	[Test, Order(23)]
 	public void RefreshView_NullCommandParameter_ExecutesCommandWithoutException()
 	{
 		App.WaitForElement("Options");
