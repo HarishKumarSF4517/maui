@@ -65,6 +65,25 @@ public partial class GraphicsViewOptionsPage : ContentPage
 			_viewModel.IsVisible = false;
 	}
 
+	private void OnFlowDirectionCheckedChanged(object sender, CheckedChangedEventArgs e)
+	{
+		_viewModel.FlowDirection = FlowDirectionRtlRadio.IsChecked ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+	}
+
+	private void OnBackgroundCheckedChanged(object sender, CheckedChangedEventArgs e)
+	{
+		var radioButton = sender as RadioButton;
+		if (radioButton is null || !radioButton.IsChecked)
+			return;
+
+		_viewModel.Background = radioButton.Content.ToString() switch
+		{
+			"Red" => new SolidColorBrush(Colors.Red),
+			"Green" => new SolidColorBrush(Colors.Green),
+			_ => null,
+		};
+	}
+
 	private void OnShadowInputChanged(object sender, TextChangedEventArgs e)
 	{
 		var input = ShadowInputEntry.Text;

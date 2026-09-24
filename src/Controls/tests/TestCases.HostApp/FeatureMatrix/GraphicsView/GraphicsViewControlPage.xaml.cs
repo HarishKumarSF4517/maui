@@ -36,7 +36,7 @@ public partial class GraphicsViewControlMainPage : ContentPage
 
 	private async void NavigateToOptionsPage_Clicked(object sender, EventArgs e)
 	{
-		BindingContext = _viewModel = new GraphicsViewViewModel(); // Ensure the ViewModel is set for the options page
+		_viewModel.ResetToDefault();
 		await Navigation.PushAsync(new GraphicsViewOptionsPage(_viewModel));
 	}
 

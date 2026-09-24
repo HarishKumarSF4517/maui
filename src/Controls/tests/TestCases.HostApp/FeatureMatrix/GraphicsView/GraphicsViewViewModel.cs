@@ -168,12 +168,56 @@ public class GraphicsViewViewModel : INotifyPropertyChanged
 		}
 	}
 
+	private Brush _background = new SolidColorBrush(Colors.Transparent);
+	public Brush Background
+	{
+		get => _background;
+		set
+		{
+			if (_background != value)
+			{
+				_background = value;
+				OnPropertyChanged();
+			}
+		}
+	}
+
+	private FlowDirection _flowDirection = FlowDirection.LeftToRight;
+	public FlowDirection FlowDirection
+	{
+		get => _flowDirection;
+		set
+		{
+			if (_flowDirection != value)
+			{
+				_flowDirection = value;
+				OnPropertyChanged();
+			}
+		}
+	}
+
 	public IDrawable Drawable { get; private set; }
 
 	private readonly Dictionary<DrawableType, (double X, double Y, double Width, double Height)> _drawableDimensions = new();
 
 	public GraphicsViewViewModel()
 	{
+		UpdateDrawable();
+	}
+
+	public void ResetToDefault()
+	{
+		CurrentDrawColor = Colors.Blue;
+		SelectedDrawable = DrawableType.Square;
+		IsEnabled = true;
+		IsVisible = true;
+		HeightRequest = 100;
+		WidthRequest = 100;
+		Shadow = null;
+		Background = new SolidColorBrush(Colors.Transparent);
+		FlowDirection = FlowDirection.LeftToRight;
+		ClearInteractionHistory();
+		_drawableDimensions.Clear();
 		UpdateDrawable();
 	}
 
@@ -813,4 +857,3 @@ public class TransparentEllipseDrawable : IDrawable
 		canvas.RestoreState();
 	}
 }
-

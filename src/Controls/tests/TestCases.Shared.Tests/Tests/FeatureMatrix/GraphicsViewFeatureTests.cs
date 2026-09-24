@@ -4,6 +4,7 @@ using UITest.Core;
 
 namespace Microsoft.Maui.TestCases.Tests;
 
+[Category(UITestCategories.GraphicsView)]
 public class GraphicsViewFeatureTests : _GalleryUITest
 {
 	public const string GraphicsViewFeatureMatrix = "GraphicsView Feature Matrix";
@@ -28,7 +29,6 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 
 #if TEST_FAILS_ON_CATALYST // On MacCatalyst, when the test case is executed directly, the cursor automatically stays centered on the screen. Because of this, the cursor interacts with the GraphicsView and triggers the StartHoverInteraction event in CI. To avoid this false interaction, the test case is restricted.
 	[Test, Order(1)]
-	[Category(UITestCategories.GraphicsView)]
 	public void GraphicsView_ValidateDefaultValues_VerifyInitialState()
 	{
 		App.WaitForElement("Options");
@@ -49,8 +49,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 
 	#region Drawable Type Tests
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(2)]
 	public void GraphicsView_SquareDrawable_VerifyTypeAndRendering()
 	{
 		App.WaitForElement("Options");
@@ -65,8 +64,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		VerifyShapeScreenshot();
 	}
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(3)]
 	public void GraphicsView_TriangleDrawable_VerifyTypeAndRendering()
 	{
 		App.WaitForElement("Options");
@@ -81,8 +79,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		VerifyShapeScreenshot();
 	}
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(4)]
 	public void GraphicsView_EllipseDrawable_VerifyTypeAndRendering()
 	{
 		App.WaitForElement("Options");
@@ -97,8 +94,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		VerifyShapeScreenshot();
 	}
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(5)]
 	public void GraphicsView_LineDrawable_VerifyTypeAndRendering()
 	{
 		App.WaitForElement("Options");
@@ -113,8 +109,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		VerifyShapeScreenshot();
 	}
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(6)]
 	public void GraphicsView_StringDrawable_VerifyTypeAndRendering()
 	{
 		App.WaitForElement("Options");
@@ -130,8 +125,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 	}
 
 #if TEST_FAILS_ON_ANDROID // Issue Link: https://github.com/dotnet/maui/issues/30783
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(7)]
 	public void GraphicsView_ImageDrawable_VerifyTypeAndRendering()
 	{
 		App.WaitForElement("Options");
@@ -145,11 +139,9 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		Assert.That(App.FindElement("DrawableTypeLabel").GetText(), Is.EqualTo("Image"));
 		VerifyShapeScreenshot();
 	}
-#endif
 
-#if TEST_FAILS_ON_ANDROID  //See issue : https://github.com/dotnet/maui/issues/29394                                                            
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	// See issue: https://github.com/dotnet/maui/issues/29394
+	[Test, Order(8)]
 	public void GraphicsView_TransparentEllipseDrawable_VerifyTypeAndRendering()
 	{
 		App.WaitForElement("Options");
@@ -161,7 +153,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		App.WaitForElement("Options");
 
 		Assert.That(App.FindElement("DrawableTypeLabel").GetText(), Is.EqualTo("TransparentEllipse"));
-		
+
 		VerifyShapeScreenshot();
 	}
 #endif
@@ -170,8 +162,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 
 	#region IsVisible Tests
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(9)]
 	public void GraphicsView_SetVisibilityToTrue_VerifyVisibleState()
 	{
 		App.WaitForElement("Options");
@@ -185,8 +176,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		VerifyShapeScreenshot();
 	}
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(10)]
 	public void GraphicsView_SetVisibilityToFalse_VerifyHiddenState()
 	{
 		App.WaitForElement("Options");
@@ -204,8 +194,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 
 	#region Dimensions Tests
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(11)]
 	public void GraphicsView_ChangeHeightRequest_VerifyDimensionsUpdate()
 	{
 		App.WaitForElement("Options");
@@ -222,8 +211,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		Assert.That(dimensionsText, Does.Contain("Height: 150"));
 	}
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(12)]
 	public void GraphicsView_ChangeWidthRequest_VerifyDimensionsUpdate()
 	{
 		App.WaitForElement("Options");
@@ -240,8 +228,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		Assert.That(dimensionsText, Does.Contain("Width: 200"));
 	}
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(13)]
 	public void GraphicsView_ChangeBothDimensions_VerifyDimensionsUpdate()
 	{
 		App.WaitForElement("Options");
@@ -264,12 +251,10 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 
 	#endregion
 
-	#region Shadow Tests
 #if TEST_FAILS_ON_WINDOWS
 	// Note: Shadow tests are currently disabled on Windows due to known issues with GraphicsView                                                                                                    
 	//See Issue : https://github.com/dotnet/maui/issues/30778	
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(14)]
 	public void GraphicsView_SetShadowProperties_VerifyVisualState()
 	{
 		App.WaitForElement("Options");
@@ -285,8 +270,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		VerifyShapeScreenshot();
 	}
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(15)]
 	public void GraphicsView_SetInvalidShadowProperties_VerifyGracefulHandling()
 	{
 		App.WaitForElement("Options");
@@ -302,15 +286,78 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		VerifyShapeScreenshot();
 	}
 #endif
-	#endregion
+
+#if TEST_FAILS_ON_WINDOWS && TEST_FAILS_ON_IOS && TEST_FAILS_ON_MACCATALYST // For more information, see: https://github.com/dotnet/maui/issues/31239
+
+
+	[Test, Order(16)]
+	public void GraphicsView_SetBackgroundColor_VerifyVisualState()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("BackgroundRedRadio");
+		App.Tap("BackgroundRedRadio");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElement("DrawableTypeLabel");
+		App.Tap("DrawableTypeLabel");
+		VerifyShapeScreenshot();
+	}
+
+	[Test, Order(17)]
+	public void GraphicsView_ClearBackgroundColor_VerifyVisualState()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("BackgroundGreenRadio");
+		App.Tap("BackgroundGreenRadio");
+		App.WaitForElement("BackgroundNoneRadio");
+		App.Tap("BackgroundNoneRadio");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElement("DrawableTypeLabel");
+		App.Tap("DrawableTypeLabel");
+		VerifyShapeScreenshot();
+	}
+#endif
+
+
+	[Test, Order(18)]
+	public void GraphicsView_SetFlowDirectionRTL_VerifyMirroredLayout()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("FlowDirectionRtlRadio");
+		App.Tap("FlowDirectionRtlRadio");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElement("DrawableTypeLabel");
+		App.Tap("DrawableTypeLabel");
+		VerifyShapeScreenshot();
+	}
+
+	[Test, Order(19)]
+	public void GraphicsView_SetFlowDirectionLTR_VerifyDefaultLayout()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("FlowDirectionRtlRadio");
+		App.Tap("FlowDirectionRtlRadio");
+		App.WaitForElement("FlowDirectionLtrRadio");
+		App.Tap("FlowDirectionLtrRadio");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElement("DrawableTypeLabel");
+		App.Tap("DrawableTypeLabel");
+		VerifyShapeScreenshot();
+	}
 
 
 #if TEST_FAILS_ON_WINDOWS       //Note:These tests are currently disabled on Windows due to a Graphicsview automationid doesn't work.                                                                              
 
 	#region Interaction Event Tests
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(20)]
 	public void GraphicsView_StartInteraction_VerifyEventTriggered()
 	{
 		App.WaitForElement("ClearEventsButton");
@@ -322,8 +369,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		Assert.That(interactionLabel.GetText(), Does.Contain("StartInteraction"));
 	}
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(21)]
 	public void GraphicsView_EndInteraction_VerifyEventTriggered()
 	{
 		App.WaitForElement("ClearEventsButton");
@@ -335,8 +381,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		Assert.That(interactionLabel.GetText(), Does.Contain("EndInteraction"));
 	}
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(22)]
 	public void GraphicsView_DragInteraction_VerifyEventTriggered()
 	{
 		App.WaitForElement("ClearEventsButton");
@@ -363,8 +408,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 
 	#region IsEnabled Tests
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(23)]
 	public void GraphicsView_SetEnabledToTrue_VerifyEnabledState()
 	{
 		App.WaitForElement("Options");
@@ -379,10 +423,12 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		Assert.That(graphicsView.IsEnabled(), Is.True);
 	}
 
-#if TEST_FAILS_ON_MACCATALYST && TEST_FAILS_ON_IOS && TEST_FAILS_ON_ANDROID
-//See Issue : https://github.com/dotnet/maui/issues/30649
-		[Test]
-		[Category(UITestCategories.GraphicsView)]
+#if TEST_FAILS_ON_ANDROID && TEST_FAILS_ON_IOS && TEST_FAILS_ON_CATALYST && TEST_FAILS_ON_WINDOWS
+		// Currently disabled on every platform: fails on Android/iOS/MacCatalyst due to
+		// https://github.com/dotnet/maui/issues/30649, and on Windows because the GraphicsView
+		// AutomationId isn't queryable. Re-enable once dotnet/maui#30649 is fixed and this can
+		// run on Android/iOS/MacCatalyst, and Windows automation can query GraphicsView.
+		[Test, Order(24)]
 		public void GraphicsView_SetEnabledToFalse_VerifyDisabledState()
 		{
 			App.WaitForElement("Options");
@@ -402,8 +448,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 
 	#region Combined Feature Tests
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(25)]
 	public void GraphicsView_TriangleWithCustomDimensions_VerifyState()
 	{
 		App.WaitForElement("Options");
@@ -429,11 +474,11 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 	}
 
 #if TEST_FAILS_ON_ANDROID && TEST_FAILS_ON_IOS && TEST_FAILS_ON_CATALYST && TEST_FAILS_ON_WINDOWS
-// This test fails on Android, iOS, and MacCatalyst. See issue: https://github.com/dotnet/maui/issues/30649
-// Note: The test is also disabled on Windows due to the GraphicsView AutomationId not functioning correctly.
+		// Currently disabled on every platform: fails on Android, iOS, and MacCatalyst
+		// (see https://github.com/dotnet/maui/issues/30649), and on Windows because the
+		// GraphicsView AutomationId isn't queryable. Re-enable once dotnet/maui#30649 is fixed.
 
-		[Test]
-		[Category(UITestCategories.GraphicsView)]
+		[Test, Order(26)]
 		public void GraphicsView_DisabledSquareWithInteraction_VerifyNoInteraction()
 		{
 			App.WaitForElement("Options");
@@ -464,7 +509,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 	[TestCase("0", "0", false, TestName = "GraphicsView_SetZeroDimensions_VerifyHandling")]
 	[TestCase("-10", "-20", false, TestName = "GraphicsView_SetNegativeDimensions_VerifyHandling")]
 	[TestCase("0.5", "0.5", true, TestName = "GraphicsView_SetDecimalDimensions_VerifyHandling")]
-	[Category(UITestCategories.GraphicsView)]
+	[Order(27)]
 	public void GraphicsView_SetDimensionsEdgeCases_VerifyHandling(string height, string width, bool shouldBeVisible)
 	{
 		App.WaitForElement("Options");
@@ -496,8 +541,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		}
 	}
 
-	[Test]
-	[Category(UITestCategories.GraphicsView)]
+	[Test, Order(28)]
 	public void GraphicsView_InvalidateButton_ChangesColorAndLogsEvent()
 	{
 		App.WaitForElement("Options");
