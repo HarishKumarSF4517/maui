@@ -303,7 +303,7 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 #endif
 #endif
 
-#if TEST_FAILS_ON_WINDOWS && TEST_FAILS_ON_IOS && TEST_FAILS_ON_MACCATALYST // For more information, see: https://github.com/dotnet/maui/issues/31239
+#if TEST_FAILS_ON_WINDOWS && TEST_FAILS_ON_IOS && TEST_FAILS_ON_CATALYST // For more information, see: https://github.com/dotnet/maui/issues/31239
 
 
 	[Test, Order(16)]
