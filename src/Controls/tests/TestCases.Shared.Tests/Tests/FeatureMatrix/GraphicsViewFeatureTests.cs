@@ -285,6 +285,22 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		App.Tap("DrawableTypeLabel");
 		VerifyShapeScreenshot();
 	}
+
+#if TEST_FAILS_ON_ANDROID && TEST_FAILS_ON_IOS && TEST_FAILS_ON_MACCATALYST
+	[Test, Order(29)]
+	public void GraphicsView_ShadowWithRTL()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("ShadowInputEntry");
+		App.EnterText("ShadowInputEntry", "5,5,10,0.5");
+		App.WaitForElement("FlowDirectionRtlRadio");
+		App.Tap("FlowDirectionRtlRadio");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		VerifyShapeScreenshot();
+	}
+#endif
 #endif
 
 #if TEST_FAILS_ON_WINDOWS && TEST_FAILS_ON_IOS && TEST_FAILS_ON_MACCATALYST // For more information, see: https://github.com/dotnet/maui/issues/31239
@@ -329,6 +345,8 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		App.Tap("Options");
 		App.WaitForElement("FlowDirectionRtlRadio");
 		App.Tap("FlowDirectionRtlRadio");
+		App.WaitForElement("String");
+		App.Tap("String");
 		App.WaitForElement("Apply");
 		App.Tap("Apply");
 		App.WaitForElement("DrawableTypeLabel");
@@ -345,6 +363,8 @@ public class GraphicsViewFeatureTests : _GalleryUITest
 		App.Tap("FlowDirectionRtlRadio");
 		App.WaitForElement("FlowDirectionLtrRadio");
 		App.Tap("FlowDirectionLtrRadio");
+		App.WaitForElement("String");
+		App.Tap("String");
 		App.WaitForElement("Apply");
 		App.Tap("Apply");
 		App.WaitForElement("DrawableTypeLabel");
