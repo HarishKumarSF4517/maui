@@ -20,13 +20,7 @@ public class WebViewViewModel : INotifyPropertyChanged
 	private string _processTerminatedStatus;
 	private string _jsEvaluationResult;
 	private bool _isEventStatusLabelVisible = false;
-	public bool IsPageLoaded { get; set; }
-	public event PropertyChangedEventHandler PropertyChanged;
-	public WebViewViewModel()
-	{
-		Source = new HtmlWebViewSource
-		{
-			Html = @"
+	public const string DefaultHtml = @"
             <html>
             <head>
                 <title>HTML WebView Source</title>
@@ -51,20 +45,34 @@ public class WebViewViewModel : INotifyPropertyChanged
                 </p>
                 <footer style='margin-top:40px; font-size:0.9em; color:gray;'>Generated for testing WebView features.</footer>
             </body>
-            </html>",
+            </html>";
+	public bool IsPageLoaded { get; set; }
+	public event PropertyChangedEventHandler PropertyChanged;
+	public WebViewViewModel()
+	{
+		Source = new HtmlWebViewSource
+		{
+			Html = DefaultHtml,
 		};
 		GoBackCommand = new Command(OnGoBack, () => CanGoBack);
 		GoForwardCommand = new Command(OnGoForward, () => CanGoForward);
 		ReloadCommand = new Command(OnReload);
 		EvaluateJavaScriptCommand = new Command(OnEvaluateJavaScript);
 	}
-	public void CopyWebViewStateFrom(WebViewViewModel oldViewModel)
+	public void ResetToDefaults()
 	{
-		WebViewReference = oldViewModel.WebViewReference;
-		IsPageLoaded = oldViewModel.IsPageLoaded;
-		CanGoBack = oldViewModel.CanGoBack;
-		CanGoForward = oldViewModel.CanGoForward;
-		JsEvaluationResult = oldViewModel.JsEvaluationResult;
+		Source = new HtmlWebViewSource
+		{
+			Html = DefaultHtml,
+		};
+		Cookies = null;
+		IsVisible = true;
+		Shadow = null;
+		NavigatingStatus = null;
+		NavigatedStatus = null;
+		ProcessTerminatedStatus = null;
+		JsEvaluationResult = string.Empty;
+		IsEventStatusLabelVisible = false;
 	}
 	public WebViewSource Source
 	{

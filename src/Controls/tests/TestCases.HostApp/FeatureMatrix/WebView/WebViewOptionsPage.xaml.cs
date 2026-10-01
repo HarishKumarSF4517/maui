@@ -19,32 +19,7 @@ public partial class WebViewOptionsPage : ContentPage
 	{
 		_viewModel.Source = new HtmlWebViewSource
 		{
-			Html = @"
-            <html>
-            <head>
-                <title>HTML WebView Source</title>
-            </head>
-            <body style='font-family:sans-serif; padding:20px;'>
-                <h1>WebView Feature Matrix</h1>
-                <p>This page demonstrates various capabilities of the .NET MAUI WebView control, such as:</p>
-                <ul>
-                    <li>Rendering HTML content</li>
-                    <li>Executing JavaScript</li>
-                    <li>Cookie management</li>
-                    <li>Back/Forward navigation</li>
-                </ul>
-                <h2>Test Content</h2>
-                <p>
-                    This is a longer body paragraph to help test the <strong>EvaluateJavaScript</strong> functionality 
-                    and how it extracts body text. You can use this text to verify substring operations and test scrolling 
-                    or formatting in the WebView.
-                </p>
-                <p>
-                    Try interacting with navigation buttons, loading multiple pages, or checking cookie behavior.
-                </p>
-                <footer style='margin-top:40px; font-size:0.9em; color:gray;'>Generated for testing WebView features.</footer>
-            </body>
-            </html>",
+			Html = WebViewViewModel.DefaultHtml,
 		};
 	}
 	private void OnMicrosoftUrlClicked(object sender, EventArgs e)

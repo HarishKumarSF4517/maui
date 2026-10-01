@@ -23,10 +23,7 @@ public partial class WebViewControlMainPage : ContentPage
 	}
 	private async void NavigateToOptionsPage_Clicked(object sender, EventArgs e)
 	{
-		var oldViewModel = _viewModel;
-		_viewModel = new WebViewViewModel();
-		_viewModel.CopyWebViewStateFrom(oldViewModel);
-		BindingContext = _viewModel;
+		_viewModel.ResetToDefaults();
 		await Navigation.PushAsync(new WebViewOptionsPage(_viewModel));
 	}
 	private void OnWebViewNavigating(object sender, WebNavigatingEventArgs e)
