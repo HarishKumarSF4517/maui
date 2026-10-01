@@ -297,6 +297,92 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForNoElement(WebViewControl);
 	}
 
+	[Test]
+	[Category(UITestCategories.WebView)]
+	public void WebView_CombineShadowAndIsVisibleFalse_VerifyWebViewHiddenRegardlessOfShadow()
+	{
+		App.WaitForElement(Options);
+		App.Tap(Options);
+		App.WaitForElement("ShadowTrue");
+		App.Tap("ShadowTrue");
+		App.WaitForElement("IsVisibleFalse");
+		App.Tap("IsVisibleFalse");
+		TapApplyAndWaitForMainPage();
+		App.WaitForNoElement(WebViewControl);
+	}
+
+	[Test]
+	[Category(UITestCategories.WebView)]
+	public void WebView_CombineUrlSourceCookieAndReload_VerifyCookiePersistsAfterReload()
+	{
+		App.WaitForElement(Options);
+		App.Tap(Options);
+		App.WaitForElement(GithubUrlButton);
+		App.Tap(GithubUrlButton);
+		App.WaitForElement(AddTestCookieButton);
+		App.Tap(AddTestCookieButton);
+		TapApplyAndWaitForMainPage();
+		App.WaitForElement("ReloadButton");
+		App.Tap("ReloadButton");
+		var navigatedText = App.FindElement(NavigatedStatusLabel).GetText();
+		Assert.That(navigatedText, Is.EqualTo("Navigated: Success"));
+		var cookiesStatusText = App.FindElement(CookieStatusMainLabel).GetText();
+		Assert.That(cookiesStatusText, Does.Contain("Domain: example.com").And.Contain("Count: 1").And.Contain("DotNetMAUICookie = My cookie"));
+	}
+
+	[Test]
+	[Category(UITestCategories.WebView)]
+	public void WebView_CombineCookieAndLoadMultiplePages_VerifyCookiesPersistAcrossHtmlSourceChange()
+	{
+		App.WaitForElement(Options);
+		App.Tap(Options);
+		App.WaitForElement(AddTestCookieButton);
+		App.Tap(AddTestCookieButton);
+		App.WaitForElement(HtmlSourceButton);
+		App.Tap(HtmlSourceButton);
+		App.WaitForElement("LoadMultiplePagesButton");
+		App.Tap("LoadMultiplePagesButton");
+		TapApplyAndWaitForMainPage();
+		var cookiesStatusText = App.FindElement(CookieStatusMainLabel).GetText();
+		Assert.That(cookiesStatusText, Does.Contain("Domain: localhost").And.Contain("Count: 1").And.Contain("DotNetMAUICookie = My cookie"));
+		App.WaitForElement(EvaluateJSButton);
+		App.Tap(EvaluateJSButton);
+		App.WaitForElement(JSResultLabel);
+		var jsResult = App.FindElement(JSResultLabel).GetText();
+		Assert.That(jsResult, Is.EqualTo("JS Result: Multiple Pages Navigation"));
+	}
+
+	[Test]
+	[Category(UITestCategories.WebView)]
+	public void WebView_CombineSequentialPageNavigation_VerifyResetToDefaultsClearsPreviousJavaScriptResult()
+	{
+		App.WaitForElement(Options);
+		App.Tap(Options);
+		App.WaitForElement("LoadPage1Button");
+		App.Tap("LoadPage1Button");
+		TapApplyAndWaitForMainPage();
+		App.WaitForElement(EvaluateJSButton);
+		App.Tap(EvaluateJSButton);
+		App.WaitForElement(JSResultLabel);
+		Assert.That(App.FindElement(JSResultLabel).GetText(), Is.EqualTo("JS Result: Navigation Test - Page 1"));
+
+		App.WaitForElement(Options);
+		App.Tap(Options);
+		App.WaitForElement("LoadPage2Button");
+		App.Tap("LoadPage2Button");
+		TapApplyAndWaitForMainPage();
+		// ResetToDefaults() runs on navigating to Options, so the previous page's JS result must not leak through.
+		App.WaitForNoElement(() =>
+{
+	var label = App.FindElement(JSResultLabel);
+	return string.IsNullOrEmpty(label?.GetText()) ? null : label;
+});
+		App.WaitForElement(EvaluateJSButton);
+		App.Tap(EvaluateJSButton);
+		App.WaitForElement(JSResultLabel);
+		Assert.That(App.FindElement(JSResultLabel).GetText(), Is.EqualTo("JS Result: Navigation Test - Page 2"));
+	}
+
 #if TEST_FAILS_ON_WINDOWS // Issue Link: https://github.com/dotnet/maui/issues/29812
 	[Test]
 	[Category(UITestCategories.WebView)]
