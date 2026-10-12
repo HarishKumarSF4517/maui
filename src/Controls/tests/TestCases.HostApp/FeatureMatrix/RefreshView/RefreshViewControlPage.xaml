@@ -30,7 +30,7 @@
                     Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
-                    VerticalOptions="Center">
+                    VerticalOptions="Fill">
                      <RefreshView x:Name="RefreshView"
                                   Command="{Binding Command}"
                                   CommandParameter="{Binding CommandParameter}"

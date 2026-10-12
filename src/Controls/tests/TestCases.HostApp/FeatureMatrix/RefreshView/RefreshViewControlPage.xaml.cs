@@ -17,14 +17,15 @@ public class RefreshViewControlPage : NavigationPage
 public partial class RefreshViewControlMainPage : ContentPage
 {
 	private RefreshViewViewModel _viewModel;
+	private RefreshView _currentRefreshView;
 
 	public RefreshViewControlMainPage(RefreshViewViewModel viewModel)
 	{
 		InitializeComponent();
 		_viewModel = viewModel;
 		BindingContext = _viewModel;
-
-		SetScrollViewContent();
+		_currentRefreshView = RefreshView;
+		SetRefreshViewValueBindings();
 	}
 
 	private async void NavigateToOptionsPage_Clicked(object sender, EventArgs e)
@@ -36,76 +37,48 @@ public partial class RefreshViewControlMainPage : ContentPage
 
 	private void SetScrollViewContent()
 	{
+		if (ReferenceEquals(_currentRefreshView, RefreshView))
+			return;
+
 		RefreshViewContainer.Children.Clear();
-
-		// Create BoxView separately
-		var boxView = new BoxView
-		{
-			HeightRequest = 100,
-			WidthRequest = 200,
-			HorizontalOptions = LayoutOptions.Start,
-			AutomationId = "BoxContent"
-		};
-
-		// Set binding immediately
-		boxView.SetBinding(BoxView.ColorProperty, "BoxViewColor");
-
-		var refreshView = new RefreshView
-		{
-			AutomationId = "RefreshView",
-			Content = new ScrollView
-			{
-				Content = boxView
-			}
-		};
-
-		refreshView.Refreshing += OnRefreshViewRefreshing;
-
-		refreshView.SetBinding(RefreshView.CommandProperty, "Command");
-		refreshView.SetBinding(RefreshView.CommandParameterProperty, "CommandParameter");
-		refreshView.SetBinding(RefreshView.FlowDirectionProperty, "FlowDirection");
-		refreshView.SetBinding(RefreshView.IsEnabledProperty, "IsEnabled");
-		refreshView.SetBinding(RefreshView.IsRefreshEnabledProperty, "IsRefreshEnabled");
-		refreshView.SetBinding(RefreshView.IsVisibleProperty, "IsVisible");
-		refreshView.SetBinding(RefreshView.IsRefreshingProperty, "IsRefreshing");
-		refreshView.SetBinding(RefreshView.RefreshColorProperty, "RefreshColor");
-		refreshView.SetBinding(RefreshView.ShadowProperty, "Shadow");
-		IsRefreshingValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.IsRefreshing), source: refreshView));
-		IsRefreshEnabledValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.IsRefreshEnabled), source: refreshView));
-		RefreshViewContainer.Children.Add(refreshView);
+		RefreshViewContainer.Children.Add(RefreshView);
+		_currentRefreshView = RefreshView;
+		SetRefreshViewValueBindings();
 	}
 
 	private void SetCollectionViewContent()
 	{
-		RefreshViewContainer.Children.Clear();
+		if (_currentRefreshView.Content is CollectionView)
+			return;
+
+		var collectionViewContent = new CollectionView
+		{
+			ItemsSource = new List<string>
+			{
+				"Item 1", "Item 2", "Item 3", "Item 4", "Item 5",
+				"Item 6", "Item 7", "Item 8", "Item 9", "Item 10"
+			},
+			ItemTemplate = new DataTemplate(() =>
+			{
+				var label = new Label
+				{
+					HorizontalOptions = LayoutOptions.Center,
+					VerticalOptions = LayoutOptions.Center,
+					FontSize = 16,
+					Padding = new Thickness(10)
+				};
+				label.SetBinding(Label.TextProperty, ".");
+				return label;
+			})
+		};
+
 		var refreshView = new RefreshView
 		{
 			AutomationId = "RefreshView",
-			Content = new CollectionView
-			{
-				ItemsSource = new List<string>
-				{
-					"Item 1", "Item 2", "Item 3", "Item 4", "Item 5",
-					"Item 6", "Item 7", "Item 8", "Item 9", "Item 10"
-				},
-				ItemTemplate = new DataTemplate(() =>
-				{
-					var label = new Label
-					{
-						HorizontalOptions = LayoutOptions.Center,
-						VerticalOptions = LayoutOptions.Center,
-						FontSize = 16,
-						Padding = new Thickness(10)
-					};
-					label.SetBinding(Label.TextProperty, ".");
-					return label;
-				})
-			}
+			Content = collectionViewContent
 		};
 
 		refreshView.Refreshing += OnRefreshViewRefreshing;
-
-
 		refreshView.SetBinding(RefreshView.CommandProperty, "Command");
 		refreshView.SetBinding(RefreshView.CommandParameterProperty, "CommandParameter");
 		refreshView.SetBinding(RefreshView.FlowDirectionProperty, "FlowDirection");
@@ -115,9 +88,17 @@ public partial class RefreshViewControlMainPage : ContentPage
 		refreshView.SetBinding(RefreshView.IsRefreshingProperty, "IsRefreshing");
 		refreshView.SetBinding(RefreshView.RefreshColorProperty, "RefreshColor");
 		refreshView.SetBinding(RefreshView.ShadowProperty, "Shadow");
-		IsRefreshingValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.IsRefreshing), source: refreshView));
-		IsRefreshEnabledValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.IsRefreshEnabled), source: refreshView));
+
+		RefreshViewContainer.Children.Clear();
 		RefreshViewContainer.Children.Add(refreshView);
+		_currentRefreshView = refreshView;
+		SetRefreshViewValueBindings();
+	}
+
+	private void SetRefreshViewValueBindings()
+	{
+		IsRefreshingValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.IsRefreshing), source: _currentRefreshView));
+		IsRefreshEnabledValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.IsRefreshEnabled), source: _currentRefreshView));
 	}
 
 	private void OnScrollViewContentClicked(object sender, EventArgs e)
