@@ -13,7 +13,7 @@
        </ContentPage.ToolbarItems>
 
        <Grid Padding="20"
-             RowDefinitions="Auto, *, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+             RowDefinitions="Auto, *, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
              ColumnDefinitions="0.5*, 0.5*"
              RowSpacing="5"
              ColumnSpacing="0">
@@ -48,7 +48,11 @@
                                    <BoxView Color="{Binding BoxViewColor}"
                                             HeightRequest="100"
                                             WidthRequest="200"
-                                            AutomationId="BoxContent"/>
+                                            AutomationId="BoxContent">
+                                          <BoxView.GestureRecognizers>
+                                                 <TapGestureRecognizer Tapped="OnBoxContentTapped"/>
+                                          </BoxView.GestureRecognizers>
+                                   </BoxView>
                             </ScrollView>
                      </RefreshView>
               </Grid>
@@ -109,12 +113,19 @@
                      HorizontalOptions="Center"
                      FontSize="16"
                      Text="Status Messages:"/>
-              <Label Grid.Row="6"
-                     Grid.Column="1"
-                     HorizontalOptions="Center"
-                     Text="{Binding RefreshStatusText}"
-                     FontSize="16"
-                     AutomationId="RefreshStatusLabel"/>
+              <VerticalStackLayout Grid.Row="6"
+                                   Grid.Column="1"
+                                   HorizontalOptions="Center">
+                     <Label x:Name="RefreshStatusLabel"
+                            HorizontalOptions="Center"
+                            Text="{Binding RefreshStatusText}"
+                            FontSize="16"
+                            AutomationId="RefreshStatusLabel"/>
+                     <Label x:Name="RefreshColorValueLabel"
+                            HorizontalOptions="Center"
+                            FontSize="14"
+                            AutomationId="RefreshColorValueLabel"/>
+              </VerticalStackLayout>
 
               <Label Grid.Row="7"
                      Grid.Column="0"
@@ -145,5 +156,18 @@
                      AutomationId="RefreshingEventLabel"
                      Text="{Binding RefreshEventStatusText}"
                      FontSize="16"/>
+
+              <Label Grid.Row="9"
+                     Grid.Column="0"
+                     HorizontalOptions="Center"
+                     Text="Content Interaction:"
+                     FontSize="16"/>
+              <Label Grid.Row="9"
+                     Grid.Column="1"
+                     x:Name="ContentInteractionStatusLabel"
+                     HorizontalOptions="Center"
+                     Text="Not Tapped"
+                     FontSize="16"
+                     AutomationId="ContentInteractionStatusLabel"/>
        </Grid>
 </ContentPage>

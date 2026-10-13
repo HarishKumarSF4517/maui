@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Maui.Controls.Sample;
 
 public class RefreshViewControlPage : NavigationPage
@@ -16,6 +18,7 @@ public class RefreshViewControlPage : NavigationPage
 
 public partial class RefreshViewControlMainPage : ContentPage
 {
+	private static readonly IValueConverter _colorToHexConverter = new ColorToHexConverter();
 	private RefreshViewViewModel _viewModel;
 	private RefreshView _currentRefreshView;
 
@@ -31,6 +34,7 @@ public partial class RefreshViewControlMainPage : ContentPage
 	private async void NavigateToOptionsPage_Clicked(object sender, EventArgs e)
 	{
 		_viewModel.ResetToDefaults();
+		ContentInteractionStatusLabel.Text = "Not Tapped";
 		SetScrollViewContent();
 		await Navigation.PushAsync(new RefreshViewOptionsPage(_viewModel));
 	}
@@ -99,6 +103,7 @@ public partial class RefreshViewControlMainPage : ContentPage
 	{
 		IsRefreshingValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.IsRefreshing), source: _currentRefreshView));
 		IsRefreshEnabledValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.IsRefreshEnabled), source: _currentRefreshView));
+		RefreshColorValueLabel.SetBinding(Label.TextProperty, new Binding(nameof(RefreshView.RefreshColor), source: _currentRefreshView, converter: _colorToHexConverter));
 	}
 
 	private void OnScrollViewContentClicked(object sender, EventArgs e)
@@ -111,11 +116,25 @@ public partial class RefreshViewControlMainPage : ContentPage
 		SetCollectionViewContent();
 	}
 
+	private void OnBoxContentTapped(object sender, TappedEventArgs e)
+	{
+		ContentInteractionStatusLabel.Text = "Tapped";
+	}
+
 	private void OnRefreshViewRefreshing(object sender, EventArgs e)
 	{
 		if (BindingContext is RefreshViewViewModel vm)
 		{
 			vm.RefreshEventStatusText = "Raised";
 		}
+	}
+
+	private sealed class ColorToHexConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+			value is Color color ? color.ToHex() : "null";
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+			throw new NotSupportedException();
 	}
 }

@@ -100,13 +100,20 @@
                      Text="IsRefreshEnabled:"
                      FontSize="15"
                      VerticalOptions="Center"/>
-              <RadioButton Grid.Row="4"
-                           Grid.Column="1"
-                           GroupName="IsRefreshEnabled"
-                           AutomationId="IsRefreshEnabledFalseButton"
-                           Content="False"
-                           CheckedChanged="OnIsRefreshEnabledRadioButtonCheckedChanged"
-                           FontSize="15"/>
+              <HorizontalStackLayout Grid.Row="4"
+                                     Grid.Column="1">
+                     <RadioButton GroupName="IsRefreshEnabled"
+                                  AutomationId="IsRefreshEnabledFalseButton"
+                                  Content="False"
+                                  CheckedChanged="OnIsRefreshEnabledRadioButtonCheckedChanged"
+                                  FontSize="15"/>
+                     <RadioButton GroupName="IsRefreshEnabled"
+                                  AutomationId="IsRefreshEnabledTrueButton"
+                                  Content="True"
+                                  IsChecked="True"
+                                  CheckedChanged="OnIsRefreshEnabledRadioButtonCheckedChanged"
+                                  FontSize="15"/>
+              </HorizontalStackLayout>
 
               <!-- IsRefreshing -->
               <Label Grid.Row="5"

@@ -43,9 +43,9 @@ public partial class RefreshViewOptionsPage : ContentPage
 
 	private void OnIsRefreshEnabledRadioButtonCheckedChanged(object sender, CheckedChangedEventArgs e)
 	{
-		if (sender is RadioButton { IsChecked: true })
+		if (sender is RadioButton { IsChecked: true } radioButton)
 		{
-			_viewModel.IsRefreshEnabled = false;
+			_viewModel.IsRefreshEnabled = radioButton.Content.ToString() == "True";
 		}
 	}
 

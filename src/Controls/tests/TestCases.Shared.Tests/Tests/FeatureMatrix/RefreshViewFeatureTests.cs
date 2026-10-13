@@ -36,6 +36,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.Tap("ScrollViewContentButton");
 		App.WaitForElement("RefreshView");
 		App.ScrollUp("RefreshView");
+		WaitForRefreshStatus("Refresh completed: Orange");
 		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Is.Not.EqualTo("None"));
 	}
 
@@ -51,6 +52,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.Tap("CollectionViewContentButton");
 		App.WaitForElement("RefreshView");
 		App.ScrollUp("RefreshView");
+		WaitForRefreshStatus("Refresh completed: Orange");
 		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Is.Not.EqualTo("None"));
 	}
 
@@ -65,6 +67,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.Tap("Apply");
 		App.WaitForElement("RefreshView");
 		App.ScrollUp("RefreshView");
+		WaitForRefreshStatus("Refresh completed: Red");
 
 		// Confirms the "Red" parameter actually reached the Command, not just that a refresh happened.
 		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Does.Contain("Red"));
@@ -81,6 +84,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.Tap("Apply");
 		App.WaitForElement("RefreshView");
 		App.ScrollUp("RefreshView");
+		WaitForRefreshStatus("Refresh completed: Green");
 
 		// Green is the other CommandParameter value that also drives BoxViewColor in the
 		// Command callback; verify it is threaded through distinctly from "Red".
@@ -113,6 +117,12 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.WaitForElement("Apply");
 		App.Tap("Apply");
 		App.WaitForElement("RefreshView");
+		Assert.That(
+			App.WaitForTextToBePresentInElement("RefreshColorValueLabel", "#0000FF", timeout: TimeSpan.FromSeconds(5)),
+			Is.True,
+			"RefreshView did not receive the configured blue RefreshColor.");
+		Assert.That(App.FindElement("RefreshColorValueLabel").GetText(), Is.EqualTo("#0000FF"));
+		WaitForRefreshStatus("Refresh Started: Orange");
 		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Is.Not.EqualTo("None"));
 		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("True"));
 	}
@@ -128,6 +138,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.Tap("Apply");
 		App.WaitForElement("RefreshView");
 		App.ScrollUp("RefreshView");
+		WaitForRefreshStatus("Refresh completed: Orange");
 		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Is.Not.EqualTo("None"));
 	}
 #endif
@@ -188,6 +199,12 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.WaitForElement("Apply");
 		App.Tap("Apply");
 		App.WaitForElement("RefreshView");
+		Assert.That(
+			App.WaitForTextToBePresentInElement("RefreshColorValueLabel", "#FF0000", timeout: TimeSpan.FromSeconds(5)),
+			Is.True,
+			"RefreshView did not receive the configured red RefreshColor.");
+		Assert.That(App.FindElement("RefreshColorValueLabel").GetText(), Is.EqualTo("#FF0000"));
+		WaitForRefreshStatus("Refresh Started: Orange");
 		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("True"));
 	}
 #endif
@@ -250,9 +267,13 @@ public class RefreshViewFeatureTests : _GalleryUITest
 
 		App.ScrollUp("RefreshView");
 
-		App.WaitForElement("RefreshingEventLabel", timeout: TimeSpan.FromSeconds(5));
+		Assert.That(
+			App.WaitForTextToBePresentInElement("RefreshingEventLabel", "Raised", timeout: TimeSpan.FromSeconds(5)),
+			Is.True,
+			"Pull-to-refresh did not raise the Refreshing event.");
 
 		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Raised"));
+		WaitForRefreshStatus("Refresh completed: Orange");
 	}
 
 	[Test, Order(17)]
@@ -293,9 +314,13 @@ public class RefreshViewFeatureTests : _GalleryUITest
 
 		App.ScrollUp("RefreshView");
 
-		App.WaitForElement("RefreshingEventLabel");
+		Assert.That(
+			App.WaitForTextToBePresentInElement("RefreshingEventLabel", "Raised", timeout: TimeSpan.FromSeconds(5)),
+			Is.True,
+			"Pull-to-refresh did not raise the Refreshing event.");
 
 		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Raised"));
+		WaitForRefreshStatus("Refresh completed: Orange");
 	}
 
 	[Test, Order(19)]
@@ -312,7 +337,10 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.ScrollUp("RefreshView");
 
 		// The Refreshing event always fires on pull-to-refresh, even when Command is null.
-		App.WaitForElement("RefreshingEventLabel", timeout: TimeSpan.FromSeconds(5));
+		Assert.That(
+			App.WaitForTextToBePresentInElement("RefreshingEventLabel", "Raised", timeout: TimeSpan.FromSeconds(5)),
+			Is.True,
+			"Pull-to-refresh did not raise the Refreshing event when Command was null.");
 		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Raised"));
 
 		// RefreshStatusLabel is only updated by the Command, so it stays "None" when Command is null.
@@ -392,7 +420,98 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.Tap("Apply");
 		App.WaitForElementTillPageNavigationSettled("Options");
 
+		WaitForRefreshStatus("Refresh Started: null");
 		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Does.Contain("null"));
 		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("True"));
+	}
+
+#if TEST_FAILS_ON_CATALYST && TEST_FAILS_ON_WINDOWS
+
+	[Test, Order(24)]
+	public void RefreshView_IsRefreshEnabledFalse_ContentRemainsInteractiveAndPullIsIgnored()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("IsRefreshEnabledFalseButton");
+		App.Tap("IsRefreshEnabledFalseButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+
+		Assert.That(App.FindElement("IsRefreshEnabledValueLabel").GetText(), Is.EqualTo("False"));
+		App.Tap("BoxContent");
+		Assert.That(
+			App.WaitForTextToBePresentInElement("ContentInteractionStatusLabel", "Tapped", timeout: TimeSpan.FromSeconds(5)),
+			Is.True,
+			"Child content should remain interactive while pull-to-refresh is disabled.");
+
+		App.ScrollUp("RefreshView");
+
+		Assert.That(App.FindElement("IsRefreshEnabledValueLabel").GetText(), Is.EqualTo("False"));
+		Assert.That(App.FindElement("RefreshingEventLabel").GetText(), Is.EqualTo("Not Raised"));
+		Assert.That(App.FindElement("RefreshStatusLabel").GetText(), Is.EqualTo("None"));
+	}
+
+	[Test, Order(25)]
+	public void RefreshView_IsRefreshEnabled_Reenabled_AllowsRefresh()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("IsRefreshEnabledFalseButton");
+		App.Tap("IsRefreshEnabledFalseButton");
+		App.WaitForElement("IsRefreshEnabledTrueButton");
+		App.Tap("IsRefreshEnabledTrueButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+
+		Assert.That(App.FindElement("IsRefreshEnabledValueLabel").GetText(), Is.EqualTo("True"));
+		App.ScrollUp("RefreshView");
+		WaitForRefreshStatus("Refresh completed: Orange");
+	}
+
+	[Test, Order(26)]
+	public void RefreshView_CommandCanExecute_Reenabled_AllowsRefresh()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("CanExecuteFalseButton");
+		App.Tap("CanExecuteFalseButton");
+		App.WaitForElement("CanExecuteTrueButton");
+		App.Tap("CanExecuteTrueButton");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+
+		Assert.That(App.FindElement("IsRefreshEnabledValueLabel").GetText(), Is.EqualTo("True"));
+		App.ScrollUp("RefreshView");
+		WaitForRefreshStatus("Refresh completed: Orange");
+	}
+
+	[Test, Order(27)]
+	public void RefreshView_RepeatedPullToRefresh_CompletesEachRefresh()
+	{
+		App.WaitForElement("Options");
+		App.Tap("Options");
+		App.WaitForElement("Apply");
+		App.Tap("Apply");
+		App.WaitForElement("RefreshView");
+
+		App.ScrollUp("RefreshView");
+		WaitForRefreshStatus("Refresh Started: Orange");
+		WaitForRefreshStatus("Refresh completed: Orange");
+		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("False"));
+
+		App.ScrollUp("RefreshView");
+		WaitForRefreshStatus("Refresh Started: Orange");
+		WaitForRefreshStatus("Refresh completed: Orange");
+		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("False"));
+	}
+
+#endif
+
+	private void WaitForRefreshStatus(string expectedText)
+	{
+		Assert.That(
+			App.WaitForTextToBePresentInElement("RefreshStatusLabel", expectedText, timeout: TimeSpan.FromSeconds(5)),
+			Is.True,
+			$"Timed out waiting for refresh status '{expectedText}'.");
 	}
 }
