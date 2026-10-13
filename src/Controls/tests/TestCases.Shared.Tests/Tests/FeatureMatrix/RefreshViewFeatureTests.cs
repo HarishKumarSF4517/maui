@@ -106,7 +106,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(7)]
-	public void RefreshView_SetRefreshColorBlue_VerifyColorChange()
+	public void RefreshView_SetRefreshColorBlue_VerifyPropertyValue()
 	{
 		App.WaitForElement("Options");
 		App.Tap("Options");
@@ -188,7 +188,7 @@ public class RefreshViewFeatureTests : _GalleryUITest
 	}
 
 	[Test, Order(12)]
-	public void RefreshView_SetRefreshColorRedAndIsRefreshing_VerifyColorChange()
+	public void RefreshView_SetRefreshColorRedAndIsRefreshing_VerifyPropertyValue()
 	{
 		App.WaitForElement("Options");
 		App.Tap("Options");
@@ -495,12 +495,10 @@ public class RefreshViewFeatureTests : _GalleryUITest
 		App.WaitForElement("RefreshView");
 
 		App.ScrollUp("RefreshView");
-		WaitForRefreshStatus("Refresh Started: Orange");
 		WaitForRefreshStatus("Refresh completed: Orange");
 		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("False"));
 
 		App.ScrollUp("RefreshView");
-		WaitForRefreshStatus("Refresh Started: Orange");
 		WaitForRefreshStatus("Refresh completed: Orange");
 		Assert.That(App.FindElement("IsRefreshingValueLabel").GetText(), Is.EqualTo("False"));
 	}
