@@ -1,12 +1,11 @@
-using Microsoft.Maui.Controls;
 using NUnit.Framework;
 using UITest.Appium;
 using UITest.Core;
 namespace Microsoft.Maui.TestCases.Tests;
 
+[Category(UITestCategories.WebView)]
 public class WebViewFeatureTests : _GalleryUITest
 {
-	const int ApplyTapMaxAttempts = 3;
 	public const string WebViewFeatureMatrix = "WebView Feature Matrix";
 	public override string GalleryPageName => WebViewFeatureMatrix;
 	public const string Options = "Options";
@@ -29,40 +28,94 @@ public class WebViewFeatureTests : _GalleryUITest
 	{
 	}
 
-	public void TapApplyAndWaitForMainPage()
+	public override void TestSetup()
 	{
-		Exception? lastError = null;
+		base.TestSetup();
+		// Reset only the feature page, keeping the app and Appium session alive.
+		App.WaitForElement(Options);
+		App.Tap(Options);
+		App.WaitForElement("ResetWebViewButton");
+		App.Tap("ResetWebViewButton");
+		App.WaitForElementTillPageNavigationSettled(Options);
+		WaitForText(NavigatedStatusLabel, "Navigated: Success");
+		WaitForText(CanGoBackLabel, "False");
+		WaitForText(CanGoForwardLabel, "False");
+	}
 
-		for (var attempt = 1; attempt <= ApplyTapMaxAttempts; attempt++)
+	// Android's native WebView does not expose its AutomationId to UIAutomator.
+	AppiumQuery WebViewQuery => Device == TestDevice.Android
+		? AppiumQuery.ByClass("android.webkit.WebView")
+		: AppiumQuery.ById(WebViewControl);
+
+	void WaitForText(string automationId, string expected)
+	{
+		static string Normalize(string? text) =>
+			string.Join(" ", (text ?? string.Empty).Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
+
+		App.WaitForElement(() =>
+			{
+				var element = App.FindElements(automationId).FirstOrDefault();
+				return element != null && Normalize(element.GetText()) == Normalize(expected) ? element : null;
+			},
+			timeoutMessage: $"Expected '{automationId}' to contain exactly '{expected}'.");
+	}
+
+	void TapApplyAndWaitForMainPage(bool waitForNavigation = true, bool showDiagnostics = true)
+	{
+		if (showDiagnostics)
 		{
-			try
-			{
-				App.WaitForElement(Apply);
-				App.Tap(Apply);
-				App.WaitForElementTillPageNavigationSettled(Options);
-				return;
-			}
-			catch (Exception ex)
-			{
-				lastError = ex;
-			}
+			App.WaitForElement("ShowDiagnosticsButton");
+			App.Tap("ShowDiagnosticsButton");
 		}
+		App.WaitForElement(Apply);
+		App.Tap(Apply);
+		App.WaitForElementTillPageNavigationSettled(Options);
+		if (waitForNavigation)
+			WaitForText(NavigatedStatusLabel, "Navigated: Success");
+	}
 
-		Assert.Fail($"Failed to tap '{Apply}' toolbar item and return to main page after {ApplyTapMaxAttempts} attempts. Last error: {lastError}");
+	void VerifyJavaScriptTitle(string title)
+	{
+		App.WaitForElement(() =>
+			{
+				var button = App.FindElements(EvaluateJSButton).FirstOrDefault();
+				return button?.IsEnabled() == true ? button : null;
+			});
+		App.Tap(EvaluateJSButton);
+		WaitForText(JSResultLabel, $"JS Result: {title}");
+	}
+
+	void NavigateAndWait(string button)
+	{
+		if (!int.TryParse(App.WaitForElement("NavigationCountLabel").GetText(), out var previousCount))
+			throw new InvalidOperationException("The WebView navigation count is not a number.");
+		App.WaitForElement(button);
+		App.Tap(button);
+		App.WaitForElement(() =>
+			{
+				var label = App.FindElements("NavigationCountLabel").FirstOrDefault();
+				return int.TryParse(label?.GetText(), out var count) && count > previousCount ? label : null;
+			},
+			timeoutMessage: $"'{button}' did not complete a new WebView navigation.");
+		WaitForText(NavigatedStatusLabel, "Navigated: Success");
+	}
+
+	void VerifyCookieContainer(string domain)
+	{
+		WaitForText(CookieStatusMainLabel, $"Domain: {domain}\nCount: 1\nDotNetMAUICookie = My cookie");
 	}
 
 	[Test, Order(1)]
-	[Category(UITestCategories.WebView)]
 	public void WebView_ValidateDefaultValues_VerifyInitialState()
 	{
 		App.WaitForElement(Options);
-		Assert.That(App.FindElement(CanGoBackLabel).GetText(), Is.EqualTo("False"));
-		Assert.That(App.FindElement(CanGoForwardLabel).GetText(), Is.EqualTo("False"));
+		WaitForText(NavigatedStatusLabel, "Navigated: Success");
+		WaitForText(CanGoBackLabel, "False");
+		WaitForText(CanGoForwardLabel, "False");
 	}
 
 #if TEST_FAILS_ON_CATALYST && TEST_FAILS_ON_IOS // Issue Link: https://github.com/dotnet/maui/issues/30381
 	[Test, Order(2)]
-	[Category(UITestCategories.WebView)]
 	public void WebView_VerifyCanGoBackForward()
 	{
 		App.WaitForElement(Options);
@@ -70,26 +123,22 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement("HtmlSourceButton");
 		App.Tap("HtmlSourceButton");
 		TapApplyAndWaitForMainPage();
-		App.Tap(Options);
-		App.WaitForElement("MicrosoftUrlButton");
-		App.Tap("MicrosoftUrlButton");
-		TapApplyAndWaitForMainPage();
+		App.WaitForElement(Options);
 		App.Tap(Options);
 		App.WaitForElement("GithubUrlButton");
 		App.Tap("GithubUrlButton");
 		TapApplyAndWaitForMainPage();
-		App.WaitForElement(CanGoBackLabel, timeout: TimeSpan.FromSeconds(3));
-		Assert.That(App.FindElement(CanGoBackLabel).GetText(), Is.EqualTo("True"));
-		App.WaitForElement(GoBackButton);
-		App.Tap(GoBackButton);
-		Thread.Sleep(2000); // Allow time to update the state
-		App.WaitForElement(CanGoForwardLabel, timeout: TimeSpan.FromSeconds(5));
-		Assert.That(App.FindElement(CanGoForwardLabel).GetText(), Is.EqualTo("True"));
+		VerifyJavaScriptTitle("Example Domain");
+		WaitForText(CanGoBackLabel, "True");
+		NavigateAndWait(GoBackButton);
+		VerifyJavaScriptTitle("HTML WebView Source");
+		WaitForText(CanGoForwardLabel, "True");
+		NavigateAndWait("GoForwardButton");
+		VerifyJavaScriptTitle("Example Domain");
 	}
 #endif
 
 	[Test, Order(3)]
-	[Category(UITestCategories.WebView)]
 	public void WebView_SetHtmlSource_VerifyJavaScript()
 	{
 		App.WaitForElement(Options);
@@ -97,15 +146,10 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement(HtmlSourceButton);
 		App.Tap(HtmlSourceButton);
 		TapApplyAndWaitForMainPage();
-		App.WaitForElement(EvaluateJSButton);
-		App.Tap(EvaluateJSButton);
-		App.WaitForElement(JSResultLabel);
-		var jsResult = App.FindElement(JSResultLabel).GetText();
-		Assert.That(jsResult, Is.EqualTo("JS Result: HTML WebView Source"));
+		VerifyJavaScriptTitle("HTML WebView Source");
 	}
 
 	[Test, Order(4)]
-	[Category(UITestCategories.WebView)]
 	public void WebView_SetUrlSource_VerifyNavigatingEvent()
 	{
 		App.WaitForElement(Options);
@@ -113,12 +157,10 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement(GithubUrlButton);
 		App.Tap(GithubUrlButton);
 		TapApplyAndWaitForMainPage();
-		var navigatingText = App.FindElement(NavigatingStatusLabel).GetText();
-		Assert.That(navigatingText, Is.Not.Null.And.Not.Empty);
+		WaitForText(NavigatingStatusLabel, "Navigating to: example.com");
 	}
 
 	[Test, Order(5)]
-	[Category(UITestCategories.WebView)]
 	public void WebView_SetUrlSource_VerifyNavigatedEvent()
 	{
 		App.WaitForElement(Options);
@@ -126,12 +168,11 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement(GithubUrlButton);
 		App.Tap(GithubUrlButton);
 		TapApplyAndWaitForMainPage();
-		var navigatedText = App.FindElement(NavigatedStatusLabel).GetText();
-		Assert.That(navigatedText, Is.EqualTo("Navigated: Success"));
+		WaitForText(NavigatedStatusLabel, "Navigated: Success");
+		VerifyJavaScriptTitle("Example Domain");
 	}
 
 	[Test, Order(6)]
-	[Category(UITestCategories.WebView)]
 	public void WebView_SetHtmlSource_VerifyNavigatingEvent()
 	{
 		App.WaitForElement(Options);
@@ -139,12 +180,10 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement(HtmlSourceButton);
 		App.Tap(HtmlSourceButton);
 		TapApplyAndWaitForMainPage();
-		var navigatingText = App.FindElement(NavigatingStatusLabel).GetText();
-		Assert.That(navigatingText, Is.Not.Null.And.Not.Empty);
+		WaitForText(NavigatingStatusLabel, "Navigating to: Embedded HTML");
 	}
 
 	[Test, Order(7)]
-	[Category(UITestCategories.WebView)]
 	public void WebView_SetHtmlSource_VerifyNavigatedEvent()
 	{
 		App.WaitForElement(Options);
@@ -152,12 +191,11 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement(HtmlSourceButton);
 		App.Tap(HtmlSourceButton);
 		TapApplyAndWaitForMainPage();
-		var navigatedText = App.FindElement(NavigatedStatusLabel).GetText();
-		Assert.That(navigatedText, Is.EqualTo("Navigated: Success"));
+		WaitForText(NavigatedStatusLabel, "Navigated: Success");
+		VerifyJavaScriptTitle("HTML WebView Source");
 	}
 
-	[Test]
-	[Category(UITestCategories.WebView)]
+	[Test, Order(8)]
 	public void WebView_TestCookieManagement_VerifyAddCookie()
 	{
 		App.WaitForElement(Options);
@@ -167,12 +205,10 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement(HtmlSourceButton);
 		App.Tap(HtmlSourceButton);
 		TapApplyAndWaitForMainPage();
-		var cookiesStatusText = App.FindElement(CookieStatusMainLabel).GetText();
-		Assert.That(cookiesStatusText, Does.Contain("Domain: localhost").And.Contain("Count: 1").And.Contain("DotNetMAUICookie = My cookie"));
+		VerifyCookieContainer("localhost");
 	}
 
-	[Test]
-	[Category(UITestCategories.WebView)]
+	[Test, Order(9)]
 	public void WebView_TestCookieManagement_VerifyAddCookieWithUrlSource()
 	{
 		App.WaitForElement(Options);
@@ -182,12 +218,13 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement(AddTestCookieButton);
 		App.Tap(AddTestCookieButton);
 		TapApplyAndWaitForMainPage();
-		var cookiesStatusText = App.FindElement(CookieStatusMainLabel).GetText();
-		Assert.That(cookiesStatusText, Does.Contain("Domain: example.com").And.Contain("Count: 1").And.Contain("DotNetMAUICookie = My cookie"));
+		VerifyCookieContainer("example.com");
+		NavigateAndWait("ReloadButton");
+		VerifyJavaScriptTitle("Example Domain");
+		WaitForText("BrowserCookiesLabel", "Browser cookies: [DotNetMAUICookie=My cookie]");
 	}
 
-	[Test]
-	[Category(UITestCategories.WebView)]
+	[Test, Order(10)]
 	public void WebView_TestCookieManagement_VerifyAddCookieAndEvaluateJavaScript()
 	{
 		App.WaitForElement(Options);
@@ -197,30 +234,35 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement(HtmlSourceButton);
 		App.Tap(HtmlSourceButton);
 		TapApplyAndWaitForMainPage();
-		App.WaitForElement(EvaluateJSButton);
-		App.Tap(EvaluateJSButton);
-		App.WaitForElement(JSResultLabel);
-		var jsResult = App.FindElement(JSResultLabel).GetText();
-		Assert.That(jsResult, Is.EqualTo("JS Result: HTML WebView Source"));
-		var cookiesStatusText = App.FindElement(CookieStatusMainLabel).GetText();
-		Assert.That(cookiesStatusText, Does.Contain("Domain: localhost").And.Contain("Count: 1").And.Contain("DotNetMAUICookie = My cookie"));
+		VerifyJavaScriptTitle("HTML WebView Source");
+		VerifyCookieContainer("localhost");
 	}
 
-	[Test]
-	[Category(UITestCategories.WebView)]
+	[Test, Order(11)]
 	public void WebView_TestClearCookies_VerifyCookiesCleared()
 	{
 		App.WaitForElement(Options);
 		App.Tap(Options);
-		App.WaitForElement(ClearCookiesButton);
-		App.Tap(ClearCookiesButton);
+		App.WaitForElement(GithubUrlButton);
+		App.Tap(GithubUrlButton);
+		App.WaitForElement(AddTestCookieButton);
+		App.Tap(AddTestCookieButton);
 		TapApplyAndWaitForMainPage();
-		var clearCookiesText = App.FindElement(CookieStatusMainLabel).GetText();
-		Assert.That(clearCookiesText, Is.EqualTo("No cookies available."));
+		VerifyCookieContainer("example.com");
+		NavigateAndWait("ReloadButton");
+		VerifyJavaScriptTitle("Example Domain");
+		WaitForText("BrowserCookiesLabel", "Browser cookies: [DotNetMAUICookie=My cookie]");
+		App.ScrollDown("WebViewFeatureScrollView");
+		App.WaitForElement("ClearBrowserCookiesButton");
+		App.Tap("ClearBrowserCookiesButton");
+		WaitForText(CookieStatusMainLabel, "No cookies available.");
+		App.ScrollUp("WebViewFeatureScrollView");
+		NavigateAndWait("ReloadButton");
+		VerifyJavaScriptTitle("Example Domain");
+		WaitForText("BrowserCookiesLabel", "Browser cookies: []");
 	}
 
-	[Test]
-	[Category(UITestCategories.WebView)]
+	[Test, Order(12)]
 	public void WebView_TestReloadMethod_VerifyReloadFunctionality()
 	{
 		App.WaitForElement(Options);
@@ -228,15 +270,12 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement(GithubUrlButton);
 		App.Tap(GithubUrlButton);
 		TapApplyAndWaitForMainPage();
-		App.WaitForElement("ReloadButton");
-		App.Tap("ReloadButton");
-		var navigatedText = App.FindElement(NavigatedStatusLabel).GetText();
-		Assert.That(navigatedText, Is.EqualTo("Navigated: Success"));
+		NavigateAndWait("ReloadButton");
+		VerifyJavaScriptTitle("Example Domain");
 	}
 
 #if TEST_FAILS_ON_IOS && TEST_FAILS_ON_CATALYST // Issue Link: https://github.com/dotnet/maui/issues/30515
-	[Test]
-	[Category(UITestCategories.WebView)]
+	[Test, Order(13)]
 	public void WebView_VerifyReloadFunctionalityForHtmlWebViewSource()
 	{
 		App.WaitForElement(Options);
@@ -244,15 +283,12 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement(HtmlSourceButton);
 		App.Tap(HtmlSourceButton);
 		TapApplyAndWaitForMainPage();
-		App.WaitForElement("ReloadButton");
-		App.Tap("ReloadButton");
-		var navigatedText = App.FindElement(NavigatedStatusLabel).GetText();
-		Assert.That(navigatedText, Is.EqualTo("Navigated: Success"));
+		NavigateAndWait("ReloadButton");
+		VerifyJavaScriptTitle("HTML WebView Source");
 	}
 #endif
 
-	[Test]
-	[Category(UITestCategories.WebView)]
+	[Test, Order(14)]
 	public void WebView_TestEvaluateJavaScriptAsync_VerifyJavaScriptExecution()
 	{
 		App.WaitForElement(Options);
@@ -260,15 +296,10 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement("LoadPage1Button");
 		App.Tap("LoadPage1Button");
 		TapApplyAndWaitForMainPage();
-		App.WaitForElement(EvaluateJSButton);
-		App.Tap(EvaluateJSButton);
-		App.WaitForElement(JSResultLabel);
-		var jsResult = App.FindElement(JSResultLabel).GetText();
-		Assert.That(jsResult, Is.EqualTo("JS Result: Navigation Test - Page 1"));
+		VerifyJavaScriptTitle("Navigation Test - Page 1");
 	}
 
-	[Test]
-	[Category(UITestCategories.WebView)]
+	[Test, Order(15)]
 	public void WebView_TestEvaluateJavaScriptAsync_VerifyJavaScriptExecutionWithMultiplePages()
 	{
 		App.WaitForElement(Options);
@@ -276,43 +307,38 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement("LoadMultiplePagesButton");
 		App.Tap("LoadMultiplePagesButton");
 		TapApplyAndWaitForMainPage();
-		App.WaitForElement(EvaluateJSButton);
-		App.Tap(EvaluateJSButton);
-		App.WaitForElement(JSResultLabel);
-		var jsResult = App.FindElement(JSResultLabel).GetText();
-		Assert.That(jsResult, Is.EqualTo("JS Result: Multiple Pages Navigation"));
+		VerifyJavaScriptTitle("Multiple Pages Navigation");
 	}
 
-	[Test]
-	[Category(UITestCategories.WebView)]
+	[Test, Order(16)]
 	public void WebView_SetIsVisibleFalse_VerifyWebViewHidden()
 	{
 		App.WaitForElement(Options);
+		App.WaitForElement(WebViewQuery);
 		App.Tap(Options);
 		App.WaitForElement(GithubUrlButton);
 		App.Tap(GithubUrlButton);
 		App.WaitForElement("IsVisibleFalse");
 		App.Tap("IsVisibleFalse");
-		TapApplyAndWaitForMainPage();
-		App.WaitForNoElement(WebViewControl);
+		TapApplyAndWaitForMainPage(waitForNavigation: false);
+		App.WaitForNoElement(WebViewQuery);
 	}
 
-	[Test]
-	[Category(UITestCategories.WebView)]
+	[Test, Order(17)]
 	public void WebView_CombineShadowAndIsVisibleFalse_VerifyWebViewHiddenRegardlessOfShadow()
 	{
 		App.WaitForElement(Options);
+		App.WaitForElement(WebViewQuery);
 		App.Tap(Options);
 		App.WaitForElement("ShadowTrue");
 		App.Tap("ShadowTrue");
 		App.WaitForElement("IsVisibleFalse");
 		App.Tap("IsVisibleFalse");
-		TapApplyAndWaitForMainPage();
-		App.WaitForNoElement(WebViewControl);
+		TapApplyAndWaitForMainPage(waitForNavigation: false);
+		App.WaitForNoElement(WebViewQuery);
 	}
 
-	[Test]
-	[Category(UITestCategories.WebView)]
+	[Test, Order(18)]
 	public void WebView_CombineUrlSourceCookieAndReload_VerifyCookiePersistsAfterReload()
 	{
 		App.WaitForElement(Options);
@@ -322,17 +348,17 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement(AddTestCookieButton);
 		App.Tap(AddTestCookieButton);
 		TapApplyAndWaitForMainPage();
-		App.WaitForElement("ReloadButton");
-		App.Tap("ReloadButton");
-		var navigatedText = App.FindElement(NavigatedStatusLabel).GetText();
-		Assert.That(navigatedText, Is.EqualTo("Navigated: Success"));
-		var cookiesStatusText = App.FindElement(CookieStatusMainLabel).GetText();
-		Assert.That(cookiesStatusText, Does.Contain("Domain: example.com").And.Contain("Count: 1").And.Contain("DotNetMAUICookie = My cookie"));
+		VerifyCookieContainer("example.com");
+		NavigateAndWait("ReloadButton");
+		VerifyJavaScriptTitle("Example Domain");
+		WaitForText("BrowserCookiesLabel", "Browser cookies: [DotNetMAUICookie=My cookie]");
+		NavigateAndWait("ReloadButton");
+		VerifyJavaScriptTitle("Example Domain");
+		WaitForText("BrowserCookiesLabel", "Browser cookies: [DotNetMAUICookie=My cookie]");
 	}
 
-	[Test]
-	[Category(UITestCategories.WebView)]
-	public void WebView_CombineCookieAndLoadMultiplePages_VerifyCookiesPersistAcrossHtmlSourceChange()
+	[Test, Order(19)]
+	public void WebView_CombineCookieAndLoadMultiplePages_VerifyCookieContainerPreservedAcrossHtmlSourceChange()
 	{
 		App.WaitForElement(Options);
 		App.Tap(Options);
@@ -343,17 +369,11 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement("LoadMultiplePagesButton");
 		App.Tap("LoadMultiplePagesButton");
 		TapApplyAndWaitForMainPage();
-		var cookiesStatusText = App.FindElement(CookieStatusMainLabel).GetText();
-		Assert.That(cookiesStatusText, Does.Contain("Domain: localhost").And.Contain("Count: 1").And.Contain("DotNetMAUICookie = My cookie"));
-		App.WaitForElement(EvaluateJSButton);
-		App.Tap(EvaluateJSButton);
-		App.WaitForElement(JSResultLabel);
-		var jsResult = App.FindElement(JSResultLabel).GetText();
-		Assert.That(jsResult, Is.EqualTo("JS Result: Multiple Pages Navigation"));
+		VerifyCookieContainer("localhost");
+		VerifyJavaScriptTitle("Multiple Pages Navigation");
 	}
 
-	[Test]
-	[Category(UITestCategories.WebView)]
+	[Test, Order(20)]
 	public void WebView_CombineSequentialPageNavigation_VerifyResetToDefaultsClearsPreviousJavaScriptResult()
 	{
 		App.WaitForElement(Options);
@@ -361,38 +381,66 @@ public class WebViewFeatureTests : _GalleryUITest
 		App.WaitForElement("LoadPage1Button");
 		App.Tap("LoadPage1Button");
 		TapApplyAndWaitForMainPage();
-		App.WaitForElement(EvaluateJSButton);
-		App.Tap(EvaluateJSButton);
-		App.WaitForElement(JSResultLabel);
-		Assert.That(App.FindElement(JSResultLabel).GetText(), Is.EqualTo("JS Result: Navigation Test - Page 1"));
+		VerifyJavaScriptTitle("Navigation Test - Page 1");
 
 		App.WaitForElement(Options);
 		App.Tap(Options);
+		// Check reset before selecting a source, whose setter also clears the result.
+		Assert.That(App.WaitForElement("InitialStateLabel").GetText(), Does.Contain("JavaScript: []"));
 		App.WaitForElement("LoadPage2Button");
 		App.Tap("LoadPage2Button");
 		TapApplyAndWaitForMainPage();
-		// ResetToDefaults() runs on navigating to Options, so the previous page's JS result must not leak through.
-		App.WaitForNoElement(() =>
-{
-	var label = App.FindElement(JSResultLabel);
-	return string.IsNullOrEmpty(label?.GetText()) ? null : label;
-});
-		App.WaitForElement(EvaluateJSButton);
-		App.Tap(EvaluateJSButton);
-		App.WaitForElement(JSResultLabel);
-		Assert.That(App.FindElement(JSResultLabel).GetText(), Is.EqualTo("JS Result: Navigation Test - Page 2"));
+		VerifyJavaScriptTitle("Navigation Test - Page 2");
+	}
+
+	[Test, Order(21)]
+	public void WebView_ReopenOptions_VerifyCookiesVisibilityAndShadowReset()
+	{
+		App.WaitForElement(WebViewQuery);
+		App.WaitForElement(Options);
+		App.Tap(Options);
+		App.WaitForElement(AddTestCookieButton);
+		App.Tap(AddTestCookieButton);
+		App.WaitForElement("ShadowTrue");
+		App.Tap("ShadowTrue");
+		App.WaitForElement("IsVisibleFalse");
+		App.Tap("IsVisibleFalse");
+		TapApplyAndWaitForMainPage(waitForNavigation: false);
+		VerifyCookieContainer("localhost");
+		App.WaitForNoElement(WebViewQuery);
+
+		App.WaitForElement(Options);
+		App.Tap(Options);
+		WaitForText("InitialStateLabel",
+			"JavaScript: []\nCookies: 0\nVisible: True\nShadow: False\nProcess terminated: []");
+		TapApplyAndWaitForMainPage();
+		App.WaitForElement(WebViewQuery);
+		WaitForText(CookieStatusMainLabel, "No cookies available.");
+	}
+
+	[Test, Order(22)]
+	public void WebView_LoadMultiplePages_VerifyLinkNavigation()
+	{
+		App.WaitForElement(Options);
+		App.Tap(Options);
+		App.WaitForElement("LoadMultiplePagesButton");
+		App.Tap("LoadMultiplePagesButton");
+		TapApplyAndWaitForMainPage();
+		VerifyJavaScriptTitle("Multiple Pages Navigation");
+		// Mac2 reports incorrect WebKit link bounds; activate the DOM link through diagnostics.
+		NavigateAndWait(Device == TestDevice.Mac ? "FollowFirstLinkButton" : "Go to Page 2 (Example.com)");
+		VerifyJavaScriptTitle("Example Domain");
 	}
 
 #if TEST_FAILS_ON_WINDOWS // Issue Link: https://github.com/dotnet/maui/issues/29812
-	[Test]
-	[Category(UITestCategories.WebView)]
+	[Test, Order(23)]
 	public void VerifyWebViewWithShadow()
 	{
 		App.WaitForElement(Options);
 		App.Tap(Options);
 		App.WaitForElement("ShadowTrue");
 		App.Tap("ShadowTrue");
-		TapApplyAndWaitForMainPage();
+		TapApplyAndWaitForMainPage(showDiagnostics: false);
 		VerifyScreenshot(tolerance: 0.5, retryTimeout: TimeSpan.FromSeconds(2));
 	}
 #endif

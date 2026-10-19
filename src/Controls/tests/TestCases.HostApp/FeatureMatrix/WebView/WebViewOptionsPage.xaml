@@ -15,17 +15,20 @@
                        FontSize="15"
                        FontAttributes="Bold"/>
                 <HorizontalStackLayout  Spacing="5">
+                        <Button Text="Reset"
+                                Clicked="ResetWebView_Clicked"
+                                AutomationId="ResetWebViewButton"/>
                         <Button x:Name="HtmlSourceButton"
                                 AutomationId="HtmlSourceButton"
                                 Text="HTML"
                                 Clicked="OnHtmlSourceClicked"/>
                         <Button x:Name="MicrosoftUrlButton"
                                 AutomationId="MicrosoftUrlButton"
-                                Text="Microsoft"
+                                Text="Example.org"
                                 Clicked="OnMicrosoftUrlClicked"/>
                         <Button x:Name="GithubUrlButton"
                                 AutomationId="GithubUrlButton"
-                                Text="Github"
+                                Text="Example.com"
                                 Clicked="OnGithubUrlClicked"/>
                 </HorizontalStackLayout>
                 <Label Text="Cookie Management:"
@@ -83,5 +86,10 @@
                                      CheckedChanged="ShadowRadio_CheckedChanged"
                                      AutomationId="ShadowTrue"/>
                 </HorizontalStackLayout>
+                <Button Text="Show diagnostics"
+                        AutomationId="ShowDiagnosticsButton"
+                        Clicked="ShowDiagnostics_Clicked"/>
+                <Label x:Name="InitialStateLabel"
+                       AutomationId="InitialStateLabel"/>
         </VerticalStackLayout>
 </ContentPage>
