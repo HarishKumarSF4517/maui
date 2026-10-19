@@ -7,13 +7,32 @@ public partial class WebViewOptionsPage : ContentPage
 	private WebViewViewModel _viewModel;
 	public WebViewOptionsPage(WebViewViewModel viewModel)
 	{
+		var initialState = $"JavaScript: [{viewModel.JsEvaluationResult}]\n" +
+			$"Cookies: {viewModel.Cookies?.Count ?? 0}\n" +
+			$"Visible: {viewModel.IsVisible}\n" +
+			$"Shadow: {viewModel.Shadow != null}\n" +
+			$"Process terminated: [{viewModel.ProcessTerminatedStatus}]";
 		InitializeComponent();
 		_viewModel = viewModel;
 		BindingContext = _viewModel;
+		InitialStateLabel.Text = initialState;
 	}
 	private async void ApplyButton_Clicked(object sender, EventArgs e)
 	{
 		await Navigation.PopAsync();
+	}
+	private async void ResetWebView_Clicked(object sender, EventArgs e)
+	{
+		// A new WebView clears native navigation history without restarting the app.
+		var previousPage = Navigation.NavigationStack[^2];
+		var newPage = new WebViewControlMainPage(new WebViewViewModel());
+		Navigation.InsertPageBefore(newPage, previousPage);
+		Navigation.RemovePage(previousPage);
+		await Navigation.PopAsync(false);
+	}
+	private void ShowDiagnostics_Clicked(object sender, EventArgs e)
+	{
+		_viewModel.IsDiagnosticsVisible = true;
 	}
 	private void OnHtmlSourceClicked(object sender, EventArgs e)
 	{
@@ -26,14 +45,14 @@ public partial class WebViewOptionsPage : ContentPage
 	{
 		_viewModel.Source = new UrlWebViewSource
 		{
-			Url = "https://www.example.com"
+			Url = "https://example.org"
 		};
 	}
 	private void OnGithubUrlClicked(object sender, EventArgs e)
 	{
 		_viewModel.Source = new UrlWebViewSource
 		{
-			Url = "https://www.example.com"
+			Url = "https://example.com"
 		};
 	}
 	private void LoadMultiplePages_Clicked(object sender, EventArgs e)
@@ -63,8 +82,8 @@ public partial class WebViewOptionsPage : ContentPage
     <body>
         <h1>Welcome to Page 1</h1>
         <p>This is the first page.</p>
-        <p><a href='https://www.example.com'>Go to Page 2 (Microsoft)</a></p>
-        <p><a href='https://www.example.com'>Go to Page 3 (GitHub)</a></p>
+        <p><a href='https://example.com'>Go to Page 2 (Example.com)</a></p>
+        <p><a href='https://example.org'>Go to Page 3 (Example.org)</a></p>
     </body>
     </html>"
 		};

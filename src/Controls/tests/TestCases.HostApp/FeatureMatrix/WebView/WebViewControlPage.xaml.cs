@@ -38,4 +38,16 @@ public partial class WebViewControlMainPage : ContentPage
 	{
 		_viewModel.OnProcessTerminated(sender, e);
 	}
+	private async void OnFollowFirstLinkClicked(object sender, EventArgs e)
+	{
+		try
+		{
+			await WebViewControl.EvaluateJavaScriptAsync(
+				"document.querySelector('a').click()");
+		}
+		catch (Exception ex)
+		{
+			_viewModel.JsEvaluationResult = $"JS Error: {ex.Message}";
+		}
+	}
 }

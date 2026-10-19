@@ -1,9 +1,11 @@
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 namespace Maui.Controls.Sample;
 
@@ -20,6 +22,11 @@ public class WebViewViewModel : INotifyPropertyChanged
 	private string _processTerminatedStatus;
 	private string _jsEvaluationResult;
 	private bool _isEventStatusLabelVisible = false;
+	private bool _isPageLoaded;
+	private int _navigationCount;
+	private string _browserCookies;
+	private int _sourceVersion;
+	private bool _isDiagnosticsVisible;
 	public const string DefaultHtml = @"
             <html>
             <head>
@@ -46,7 +53,42 @@ public class WebViewViewModel : INotifyPropertyChanged
                 <footer style='margin-top:40px; font-size:0.9em; color:gray;'>Generated for testing WebView features.</footer>
             </body>
             </html>";
-	public bool IsPageLoaded { get; set; }
+	public bool IsPageLoaded
+	{
+		get => _isPageLoaded;
+		private set
+		{
+			_isPageLoaded = value;
+			(EvaluateJavaScriptCommand as Command)?.ChangeCanExecute();
+		}
+	}
+	public int NavigationCount
+	{
+		get => _navigationCount;
+		private set
+		{
+			_navigationCount = value;
+			OnPropertyChanged();
+		}
+	}
+	public string BrowserCookies
+	{
+		get => _browserCookies;
+		private set
+		{
+			_browserCookies = value;
+			OnPropertyChanged();
+		}
+	}
+	public bool IsDiagnosticsVisible
+	{
+		get => _isDiagnosticsVisible;
+		set
+		{
+			_isDiagnosticsVisible = value;
+			OnPropertyChanged();
+		}
+	}
 	public event PropertyChangedEventHandler PropertyChanged;
 	public WebViewViewModel()
 	{
@@ -57,14 +99,11 @@ public class WebViewViewModel : INotifyPropertyChanged
 		GoBackCommand = new Command(OnGoBack, () => CanGoBack);
 		GoForwardCommand = new Command(OnGoForward, () => CanGoForward);
 		ReloadCommand = new Command(OnReload);
-		EvaluateJavaScriptCommand = new Command(OnEvaluateJavaScript);
+		EvaluateJavaScriptCommand = new Command(OnEvaluateJavaScript, () => IsPageLoaded);
+		ClearCookiesCommand = new Command(ClearCookiesForCurrentSource);
 	}
 	public void ResetToDefaults()
 	{
-		Source = new HtmlWebViewSource
-		{
-			Html = DefaultHtml,
-		};
 		Cookies = null;
 		IsVisible = true;
 		Shadow = null;
@@ -72,7 +111,13 @@ public class WebViewViewModel : INotifyPropertyChanged
 		NavigatedStatus = null;
 		ProcessTerminatedStatus = null;
 		JsEvaluationResult = string.Empty;
+		BrowserCookies = string.Empty;
 		IsEventStatusLabelVisible = false;
+		IsDiagnosticsVisible = false;
+		Source = new HtmlWebViewSource
+		{
+			Html = DefaultHtml,
+		};
 	}
 	public WebViewSource Source
 	{
@@ -82,8 +127,14 @@ public class WebViewViewModel : INotifyPropertyChanged
 			if (_source != value)
 			{
 				_source = value;
+				_sourceVersion++;
+				IsPageLoaded = false;
 				JsEvaluationResult = string.Empty;
+				BrowserCookies = string.Empty;
+				NavigatingStatus = null;
+				NavigatedStatus = null;
 				OnPropertyChanged();
+				OnPropertyChanged(nameof(CookiesDisplay));
 			}
 		}
 	}
@@ -220,6 +271,7 @@ public class WebViewViewModel : INotifyPropertyChanged
 	public ICommand GoForwardCommand { get; }
 	public ICommand ReloadCommand { get; }
 	public ICommand EvaluateJavaScriptCommand { get; }
+	public ICommand ClearCookiesCommand { get; }
 	public WebView WebViewReference { get; set; }
 	private void OnGoBack()
 	{
@@ -231,28 +283,42 @@ public class WebViewViewModel : INotifyPropertyChanged
 	}
 	private void OnReload()
 	{
+		IsPageLoaded = false;
+		NavigatingStatus = null;
+		NavigatedStatus = null;
 		WebViewReference?.Reload();
 	}
 	private async void OnEvaluateJavaScript()
 	{
 		if (WebViewReference != null)
 		{
+			var sourceVersion = _sourceVersion;
 			try
 			{
 				var title = await WebViewReference.EvaluateJavaScriptAsync("document.title");
+				var cookies = Source is UrlWebViewSource
+					? await WebViewReference.EvaluateJavaScriptAsync("document.cookie")
+					: string.Empty;
+				string result;
 				if (string.IsNullOrEmpty(title))
 				{
 					var bodyText = await WebViewReference.EvaluateJavaScriptAsync("document.body.textContent.substring(0, 20)");
-					JsEvaluationResult = $"JS Result: {bodyText}... (body content)";
+					result = $"JS Result: {bodyText}... (body content)";
 				}
 				else
 				{
-					JsEvaluationResult = $"JS Result: {title}";
+					result = $"JS Result: {title}";
 				}
+				if (sourceVersion != _sourceVersion)
+					return;
+
+				BrowserCookies = $"Browser cookies: [{cookies}]";
+				JsEvaluationResult = result;
 			}
 			catch (Exception ex)
 			{
-				JsEvaluationResult = $"JS Error: {ex.Message}";
+				if (sourceVersion == _sourceVersion)
+					JsEvaluationResult = $"JS Error: {ex.Message}";
 			}
 		}
 	}
@@ -345,6 +411,11 @@ public class WebViewViewModel : INotifyPropertyChanged
 	}
 	public void OnNavigating(object sender, WebNavigatingEventArgs e)
 	{
+		_sourceVersion++;
+		IsPageLoaded = false;
+		NavigatedStatus = null;
+		JsEvaluationResult = string.Empty;
+		BrowserCookies = string.Empty;
 		if (Source is HtmlWebViewSource)
 		{
 			NavigatingStatus = "Navigating to: Embedded HTML";
@@ -375,6 +446,8 @@ public class WebViewViewModel : INotifyPropertyChanged
 			CanGoBack = WebViewReference.CanGoBack;
 			CanGoForward = WebViewReference.CanGoForward;
 		}
+		IsPageLoaded = e.Result == WebNavigationResult.Success;
+		NavigationCount++;
 	}
 	public void OnProcessTerminated(object sender, EventArgs e)
 	{
