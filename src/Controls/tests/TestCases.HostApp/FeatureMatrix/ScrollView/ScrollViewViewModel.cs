@@ -31,6 +31,31 @@ public class ScrollViewViewModel : INotifyPropertyChanged
 
 	public ScrollViewViewModel()
 	{
+		ResetToDefaults();
+	}
+
+	/// <summary>
+	/// Restores the feature matrix's initial settings and clears scrolling diagnostics.
+	/// </summary>
+	public void ResetToDefaults()
+	{
+		IsVisible = true;
+		IsEnabled = true;
+		FlowDirection = FlowDirection.LeftToRight;
+		Orientation = ScrollOrientation.Vertical;
+		HorizontalScrollBarVisibility = ScrollBarVisibility.Never;
+		VerticalScrollBarVisibility = ScrollBarVisibility.Never;
+		ContentText = null;
+		ScrollX = 0;
+		ScrollY = 0;
+		ScrollToRequestedText = "Not Raised";
+		RequestedScrollX = 0;
+		RequestedScrollY = 0;
+		RequestedPosition = default;
+		RequestedAnimate = false;
+		Mode = default;
+		RequestedElementTypeName = null;
+		SelectedScrollToPosition = ScrollToPosition.MakeVisible;
 		Content = new Label
 		{
 			Text = string.Join(Environment.NewLine, Enumerable.Range(1, 60).Select(i => $"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, urna eu tincidunt consectetur, nisi nisl aliquam enim, eget facilisis enim nisl nec elit . Sed euismod, urna eu tincidunt consectetur, nisi nisl aliquam enim Eget facilisis enim nisl nec elit Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. Nullam ac erat at dui laoreet aliquet. Praesent euismod, justo at dictum facilisis, urna erat dictum enim.{i}")),

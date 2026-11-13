@@ -5,7 +5,7 @@ namespace Maui.Controls.Sample;
 
 public class ScrollViewControlPage : NavigationPage
 {
-	private ScrollViewViewModel _viewModel;
+	private readonly ScrollViewViewModel _viewModel;
 
 	public ScrollViewControlPage()
 	{
@@ -16,7 +16,7 @@ public class ScrollViewControlPage : NavigationPage
 
 public partial class ScrollViewControlMainPage : ContentPage
 {
-	private ScrollViewViewModel _viewModel;
+	private readonly ScrollViewViewModel _viewModel;
 
 	public ScrollViewControlMainPage(ScrollViewViewModel viewModel)
 	{
@@ -27,18 +27,9 @@ public partial class ScrollViewControlMainPage : ContentPage
 
 	private async void NavigateToOptionsPage_Clicked(object sender, EventArgs e)
 	{
-		BindingContext = _viewModel = new ScrollViewViewModel();
+		_viewModel.ResetToDefaults();
+		await MyScrollView.ScrollToAsync(0, 0, false);
 		_viewModel.ScrollToRequestedText = "Not Raised";
-		_viewModel.ScrollX = 0;
-		_viewModel.ScrollY = 0;
-		_viewModel.ContentSize = new Size(0, 0);
-		Dispatcher.Dispatch(async () =>
-		{
-			if (_viewModel.Content != null)
-			{
-				await MyScrollView.ScrollToAsync(_viewModel.Content, ScrollToPosition.MakeVisible, false);
-			}
-		});
 		await Navigation.PushAsync(new ScrollViewOptionsPage(_viewModel));
 	}
 

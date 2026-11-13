@@ -6,8 +6,8 @@ public partial class ScrollViewOptionsPage : ContentPage
 
 	public ScrollViewOptionsPage(ScrollViewViewModel viewModel)
 	{
-		InitializeComponent();
 		_viewModel = viewModel;
+		InitializeComponent();
 		BindingContext = _viewModel;
 	}
 
